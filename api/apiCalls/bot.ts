@@ -3,7 +3,7 @@ import { TwitterBot, TwitterConnectResponse, TwitterCallbackResponse } from "@/t
 import { ApiResponse } from "@/types/api";
 
 export const createBot = async (
-  data: Pick<TwitterBot, "name" | "description" | "wallet_address">
+  data: Pick<TwitterBot, "name" | "description">
 ): Promise<ApiResponse<TwitterBot>> => {
   const response = await axios.post<ApiResponse<TwitterBot>>("/api/bot/", data);
   return response.data;

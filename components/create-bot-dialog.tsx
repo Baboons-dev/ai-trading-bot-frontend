@@ -22,12 +22,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { TwitterBot } from "@/types/bot";  
+import { TwitterBot } from "@/types/bot";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   description: z.string().min(10).max(200),
-  walletAddress: z.string().min(32).max(44),
 });
 
 interface CreateBotDialogProps {
@@ -50,7 +49,6 @@ export function CreateBotDialog({
     defaultValues: {
       name: editBot?.name || "",
       description: editBot?.description || "",
-      walletAddress: editBot?.wallet_address || "",
     },
   });
 
@@ -59,7 +57,6 @@ export function CreateBotDialog({
       form.reset({
         name: editBot.name,
         description: editBot.description,
-        walletAddress: editBot.wallet_address,
       });
     }
   }, [editBot, form]);
@@ -71,7 +68,7 @@ export function CreateBotDialog({
       form.reset();
       onOpenChange(false);
     } catch (error) {
-      console.error('Failed to create bot:', error);
+      console.error("Failed to create bot:", error);
     } finally {
       setLoading(false);
     }
@@ -114,24 +111,15 @@ export function CreateBotDialog({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="walletAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>SOL Wallet Address</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="Enter SOL wallet address" 
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (editBot ? "Updating..." : "Creating...") : (editBot ? "Update Bot" : "Create Bot")}
+              {loading
+                ? editBot
+                  ? "Updating..."
+                  : "Creating..."
+                : editBot
+                ? "Update Bot"
+                : "Create Bot"}
             </Button>
           </form>
         </Form>

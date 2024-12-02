@@ -5,7 +5,6 @@ export interface TwitterBot extends BaseModel {
   user: number;
   name: string;
   description: string;
-  wallet_address: string;
   twitter_account_id?: string;
   twitter_username?: string;
   access_token?: string;

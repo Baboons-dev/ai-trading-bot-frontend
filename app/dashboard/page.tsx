@@ -52,43 +52,43 @@ function DashboardContent() {
 
   useEffect(() => {
     const handleTwitterCallback = async () => {
-      const oauth_verifier = searchParams.get('oauth_verifier');
-      const oauth_token = searchParams.get('oauth_token');
-      const bot_id = localStorage.getItem('twitter_connect_bot_id');
-      
+      const oauth_verifier = searchParams.get("oauth_verifier");
+      const oauth_token = searchParams.get("oauth_token");
+      const bot_id = localStorage.getItem("twitter_connect_bot_id");
+
       if (oauth_verifier && oauth_token && bot_id) {
         try {
           const response = await completeTwitterAuth({
             oauth_verifier,
             oauth_token,
-            bot_id
+            bot_id,
           });
-          
+
           console.log(response);
-          if (response.status === 'success') {
-            setBots(prevBots => 
-              prevBots.map(b => 
+          if (response.status === "success") {
+            setBots((prevBots) =>
+              prevBots.map((b) =>
                 b.id === parseInt(bot_id) ? response.bot : b
               )
             );
-            
+
             await fetchBots();
-            
+
             toast({
               title: "Success",
-              description: "Twitter successfully connected!"
+              description: "Twitter successfully connected!",
             });
           }
         } catch (error: any) {
-          console.error('Twitter connection error:', error);
+          console.error("Twitter connection error:", error);
           toast({
             variant: "destructive",
             title: "Error",
-            description: "Failed to connect Twitter account"
+            description: "Failed to connect Twitter account",
           });
         } finally {
-          localStorage.removeItem('twitter_connect_bot_id');
-          router.replace('/dashboard');
+          localStorage.removeItem("twitter_connect_bot_id");
+          router.replace("/dashboard");
         }
       }
     };
@@ -99,21 +99,19 @@ function DashboardContent() {
   const handleCreateBot = async (data: {
     name: string;
     description: string;
-    walletAddress: string;
   }) => {
     try {
       const response = await createBot({
         name: data.name,
         description: data.description,
-        wallet_address: data.walletAddress,
       });
-      
+
       if (response) {
         // First close the dialog
         setDialogOpen(false);
         // Then fetch fresh data
         await fetchBots();
-        
+
         // Finally show success message
         toast({
           title: "Success",
@@ -178,7 +176,6 @@ function DashboardContent() {
   const handleUpdateBot = async (data: {
     name: string;
     description: string;
-    walletAddress: string;
   }) => {
     if (!editBot?.id) {
       console.error("No bot selected for editing");
@@ -194,7 +191,6 @@ function DashboardContent() {
       const updatedBot = await updateBot(editBot.id, {
         name: data.name,
         description: data.description,
-        wallet_address: data.walletAddress,
       });
 
       setBots((prevBots) =>
@@ -219,7 +215,6 @@ function DashboardContent() {
   const handleCreateOrUpdateBot = (data: {
     name: string;
     description: string;
-    walletAddress: string;
   }) => {
     if (editBot) {
       handleUpdateBot(data);

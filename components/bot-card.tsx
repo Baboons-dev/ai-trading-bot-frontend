@@ -17,12 +17,12 @@ interface BotCardProps {
   onTwitterConnect: (bot: TwitterBot) => void;
 }
 
-export function BotCard({ 
-  bot, 
-  onToggle, 
-  onDelete, 
+export function BotCard({
+  bot,
+  onToggle,
+  onDelete,
   onEdit,
-  onTwitterConnect 
+  onTwitterConnect,
 }: BotCardProps) {
   return (
     <ClientOnly>
@@ -50,13 +50,14 @@ export function BotCard({
                 <span className="font-medium">{bot.twitter_username}</span>
               </div>
 
-              <div className="flex items-center gap-2.5 text-sm bg-primary/5 p-2.5 rounded-lg">
+              {/* <div className="flex items-center gap-2.5 text-sm bg-primary/5 p-2.5 rounded-lg">
                 <Wallet className="h-4 w-4 text-primary" />
                 <span className="text-muted-foreground">Wallet:</span>
                 <span className="font-medium truncate">
                   {bot.wallet_address}
+                  N/A
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-2">
@@ -99,12 +100,11 @@ export function BotCard({
         </div>
 
         {bot?.id && (
-          <TwitterConnectButton 
+          <TwitterConnectButton
             bot={bot}
             onSuccess={(updatedBot) => onTwitterConnect(updatedBot)}
           />
         )}
-  
       </Card>
     </ClientOnly>
   );
