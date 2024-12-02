@@ -64,14 +64,7 @@ function DashboardContent() {
             bot_id,
           });
 
-          console.log(response);
           if (response.status === "success") {
-            setBots((prevBots) =>
-              prevBots.map((b) =>
-                b.id === parseInt(bot_id) ? response.bot : b
-              )
-            );
-
             await fetchBots();
 
             toast({
