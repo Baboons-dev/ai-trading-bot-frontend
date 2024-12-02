@@ -4,7 +4,6 @@ export interface User extends BaseModel {
   id: number;
   email: string;
   full_name?: string;
-  wallet_address?: string | null;
   username?: string;
   is_active?: boolean;
   is_staff?: boolean;
@@ -28,7 +27,6 @@ export interface AuthResponse {
   status: "success" | "error";
   data: {
     user_id: number;
-    wallet_address: string | null;
     email: string;
     exp: number;
     access_token: string;
