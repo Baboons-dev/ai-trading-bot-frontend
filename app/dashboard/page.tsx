@@ -1,290 +1,148 @@
-"use client";
+'use client';
 
-import { useEffect, useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { DashboardHeader } from "@/components/dashboard-header";
-import { CreateBotDialog } from "@/components/create-bot-dialog";
-import { BotCard } from "@/components/bot-card";
-import { TwitterBot } from "@/types/bot";
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import {
-  createBot,
-  getBots,
-  deleteBot,
-  toggleBotActive,
-  updateBot,
-  completeTwitterAuth,
-} from "@/api/apiCalls/bot";
-import { useToast } from "@/components/ui/use-toast";
+  Twitter,
+  BarChart3,
+  MessageCircle,
+  Users,
+  Repeat2,
+} from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+import Image from 'next/image';
 
-function DashboardContent() {
-  const { toast } = useToast();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [bots, setBots] = useState<TwitterBot[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editBot, setEditBot] = useState<TwitterBot | undefined>();
+const data = [
+  { name: 'Mon', tweets: 4, engagement: 120 },
+  { name: 'Tue', tweets: 3, engagement: 98 },
+  { name: 'Wed', tweets: 5, engagement: 260 },
+  { name: 'Thu', tweets: 4, engagement: 380 },
+  { name: 'Fri', tweets: 3, engagement: 430 },
+  { name: 'Sat', tweets: 4, engagement: 520 },
+  { name: 'Sun', tweets: 5, engagement: 489 },
+];
 
-  const fetchBots = async () => {
-    try {
-      setLoading(true);
-      const botsData = await getBots();
-      console.log("Fetched bots:", botsData);
-      setBots(Array.isArray(botsData) ? botsData : []);
-    } catch (error) {
-      console.error("Error fetching bots:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to fetch bots",
-      });
-      setBots([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+const recentTweets = [
+  {
+    id: 1,
+    content: 'Just discovered a new JavaScript trick that will blow your mind! 🤯 #CodeTips',
+    engagement: 145,
+    time: '2h ago',
+  },
+  {
+    id: 2,
+    content: 'Why did the programmer quit his job? Because he didn\'t get arrays! 😄 #ProgrammingHumor',
+    engagement: 89,
+    time: '4h ago',
+  },
+  {
+    id: 3,
+    content: 'Here\'s your daily reminder to commit your code and drink water! 💧 #DeveloperLife',
+    engagement: 234,
+    time: '6h ago',
+  },
+];
 
-  useEffect(() => {
-    fetchBots();
-  }, []);
-
-  useEffect(() => {
-    const handleTwitterCallback = async () => {
-      const oauth_verifier = searchParams.get("oauth_verifier");
-      const oauth_token = searchParams.get("oauth_token");
-      const bot_id = localStorage.getItem("twitter_connect_bot_id");
-
-      if (oauth_verifier && oauth_token && bot_id) {
-        try {
-          const response = await completeTwitterAuth({
-            oauth_verifier,
-            oauth_token,
-            bot_id,
-          });
-
-          console.log(response);
-          if (response.status === "success") {
-            setBots((prevBots) =>
-              prevBots.map((b) =>
-                b.id === parseInt(bot_id) ? response.bot : b
-              )
-            );
-
-            await fetchBots();
-
-            toast({
-              title: "Success",
-              description: "Twitter successfully connected!",
-            });
-          }
-        } catch (error: any) {
-          console.error("Twitter connection error:", error);
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to connect Twitter account",
-          });
-        } finally {
-          localStorage.removeItem("twitter_connect_bot_id");
-          router.replace("/dashboard");
-        }
-      }
-    };
-
-    handleTwitterCallback();
-  }, [searchParams, router, toast, fetchBots]);
-
-  const handleCreateBot = async (data: {
-    name: string;
-    description: string;
-  }) => {
-    try {
-      const response = await createBot({
-        name: data.name,
-        description: data.description,
-      });
-
-      if (response) {
-        // First close the dialog
-        setDialogOpen(false);
-        // Then fetch fresh data
-        await fetchBots();
-
-        // Finally show success message
-        toast({
-          title: "Success",
-          description: "Bot created successfully",
-        });
-      }
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.response?.data?.message || "Failed to create bot",
-      });
-    }
-  };
-
-  const handleDeleteBot = async (bot: TwitterBot) => {
-    try {
-      await deleteBot(bot.id);
-      setBots(bots.filter((b) => b.id !== bot.id));
-      toast({
-        title: "Success",
-        description: "Bot deleted successfully",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to delete bot",
-      });
-    }
-  };
-
-  const handleToggleBot = async (bot: TwitterBot) => {
-    try {
-      if (!bot.is_active && !bot.twitter_username) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Please connect Twitter before activating the bot",
-        });
-        return;
-      }
-
-      const response = await toggleBotActive(bot.id);
-      setBots(bots.map((b) => (b.id === bot.id ? response.data : b)));
-
-      toast({
-        title: "Success",
-        description: `Bot ${
-          response.data.is_active ? "activated" : "deactivated"
-        } successfully`,
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to toggle bot status",
-      });
-    }
-  };
-
-  const handleUpdateBot = async (data: {
-    name: string;
-    description: string;
-  }) => {
-    if (!editBot?.id) {
-      console.error("No bot selected for editing");
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "No bot selected for editing",
-      });
-      return;
-    }
-
-    try {
-      const updatedBot = await updateBot(editBot.id, {
-        name: data.name,
-        description: data.description,
-      });
-
-      setBots((prevBots) =>
-        prevBots.map((b) => (b.id === editBot.id ? updatedBot : b))
-      );
-      setDialogOpen(false);
-      setEditBot(undefined);
-
-      toast({
-        title: "Success",
-        description: "Bot updated successfully",
-      });
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update bot",
-      });
-    }
-  };
-
-  const handleCreateOrUpdateBot = (data: {
-    name: string;
-    description: string;
-  }) => {
-    if (editBot) {
-      handleUpdateBot(data);
-    } else {
-      handleCreateBot(data);
-    }
-  };
-
-  const handleTwitterConnect = (updatedBot: TwitterBot) => {
-    setBots((prevBots) =>
-      prevBots.map((b) => (b.id === updatedBot.id ? updatedBot : b))
-    );
-  };
-
+export default function Dashboard() {
   return (
-    <>
-      <div className="min-h-screen bg-background">
-        <DashboardHeader />
-        <main className="container mx-auto p-4 pt-24">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold">Your Bots</h1>
-            <Button onClick={() => setDialogOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Bot
-            </Button>
+    <div className="min-h-screen p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Image src={'/logo.svg'} alt={'logo'} width={28} height={28} />
+            <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
           </div>
+          <Button variant="outline" className="gap-2">
+            <Twitter className="w-4 h-4" />
+            View on Twitter
+          </Button>
+        </div>
 
-          {loading ? (
-            <div>Loading...</div>
-          ) : !bots || bots.length === 0 ? (
-            <div className="text-center text-muted-foreground">
-              No bots yet. Create one to get started!
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card className="p-4 bg-secondary/50 backdrop-blur">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Total Tweets</span>
             </div>
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {bots.map((bot) => (
-                <BotCard
-                  key={bot.id}
-                  bot={bot}
-                  onToggle={() => handleToggleBot(bot)}
-                  onDelete={() => handleDeleteBot(bot)}
-                  onEdit={(bot) => {
-                    setEditBot(bot);
-                    setDialogOpen(true);
-                  }}
-                  onTwitterConnect={handleTwitterConnect}
-                />
+            <p className="text-2xl font-bold mt-2">284</p>
+          </Card>
+
+          <Card className="p-4 bg-secondary/50 backdrop-blur">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Followers</span>
+            </div>
+            <p className="text-2xl font-bold mt-2">1,249</p>
+          </Card>
+
+          <Card className="p-4 bg-secondary/50 backdrop-blur">
+            <div className="flex items-center gap-2">
+              <Repeat2 className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Retweets</span>
+            </div>
+            <p className="text-2xl font-bold mt-2">892</p>
+          </Card>
+
+          <Card className="p-4 bg-secondary/50 backdrop-blur">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-primary" />
+              <span className="text-sm text-muted-foreground">Engagement Rate</span>
+            </div>
+            <p className="text-2xl font-bold mt-2">4.8%</p>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Card className="col-span-2 p-6 bg-secondary/50 backdrop-blur">
+            <h2 className="text-lg font-semibold mb-4">Engagement Overview</h2>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                  <XAxis dataKey="name" stroke="#666" />
+                  <YAxis stroke="#666" />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'rgba(0,0,0,0.8)',
+                      border: '1px solid #333',
+                      borderRadius: '4px',
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="engagement"
+                    stroke="hsl(0 72.2% 50.6%)"
+                    strokeWidth={2}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-secondary/50 backdrop-blur">
+            <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
+            <div className="space-y-4">
+              {recentTweets.map((tweet) => (
+                <Card key={tweet.id} className="p-4 bg-muted">
+                  <p className="text-sm mb-2">{tweet.content}</p>
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>{tweet.engagement} engagements</span>
+                    <span>{tweet.time}</span>
+                  </div>
+                </Card>
               ))}
             </div>
-          )}
-
-          <CreateBotDialog
-            open={dialogOpen}
-            onOpenChange={(open) => {
-              setDialogOpen(open);
-              if (!open) setEditBot(undefined);
-            }}
-            onCreate={handleCreateOrUpdateBot}
-            editBot={editBot}
-          />
-        </main>
+          </Card>
+        </div>
       </div>
-    </>
-  );
-}
-
-export default function DashboardPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <DashboardContent />
-    </Suspense>
+    </div>
   );
 }
