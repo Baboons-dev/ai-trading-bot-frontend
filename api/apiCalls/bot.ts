@@ -1,11 +1,10 @@
 import axios from "../axios";
 import { TwitterBot, TwitterConnectResponse, TwitterCallbackResponse } from "@/types/bot";
-import { ApiResponse } from "@/types/api";
 
 export const createBot = async (
   data: Pick<TwitterBot, "name" | "description">
-): Promise<ApiResponse<TwitterBot>> => {
-  const response = await axios.post<ApiResponse<TwitterBot>>("/api/bot/", data);
+): Promise<TwitterBot> => {
+  const response = await axios.post<TwitterBot>("/api/bot/", data);
   return response.data;
 };
 
@@ -28,8 +27,8 @@ export const deleteBot = async (id: number): Promise<void> => {
 
 export const toggleBotActive = async (
   id: number
-): Promise<ApiResponse<TwitterBot>> => {
-  const response = await axios.post<ApiResponse<TwitterBot>>(
+): Promise<TwitterBot> => {
+  const response = await axios.post<TwitterBot>(
     `/api/bot/${id}/toggle_active/`
   );
   return response.data;
@@ -46,15 +45,15 @@ export const connectTwitter = async (
 
 export const checkBotStatus = async (
   botId: number
-): Promise<ApiResponse<TwitterBot>> => {
-  const response = await axios.get<ApiResponse<TwitterBot>>(
+): Promise<TwitterBot> => {
+  const response = await axios.get<TwitterBot>(
     `/api/bot/${botId}/`
   );
   return response.data;
 };
 
 export const completeTwitterAuth = async (
-  data: { 
+  data: {
     oauth_token: string;
     oauth_verifier: string;
     bot_id: string;

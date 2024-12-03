@@ -51,7 +51,7 @@ export default function SignUp() {
       document.cookie = `token=${response.data.access_token}; path=/`;
       setToken(response.data.access_token);
 
-      router.push("/dashboard");
+      router.push("/setup");
     } catch (error: any) {
       toast({
         variant: "destructive",
