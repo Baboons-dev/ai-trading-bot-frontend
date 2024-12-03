@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState, useEffect } from "react";
-import { completeTwitterAuth } from "@/api/apiCalls/bot";
+import { completeTwitterAuth, getBots } from "@/api/apiCalls/bot";
 import { Suspense } from "react";
 
 const data = [
@@ -118,8 +118,25 @@ export default function Dashboard() {
   const [id, setId] = useState<string | null>(null);
 
   useEffect(() => {
-    const botId = localStorage.getItem("twitter_connect_bot_id");
-    setId(botId);
+    const fetchBotId = async () => {
+      try {
+        const bots = await getBots();
+        if (bots.length > 0) {
+          const botId = bots[0].id.toString();
+          localStorage.setItem("bot_id", botId);
+          setId(botId);
+        }
+      } catch (error) {
+        console.error("Failed to fetch bots:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch bot information",
+        });
+      }
+    };
+
+    fetchBotId();
   }, []);
 
   const handleLogout = () => {
