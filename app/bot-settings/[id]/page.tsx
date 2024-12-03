@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,8 @@ const formSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
 });
 
-export default function BotSettingsPage({ params }: { params: { id: string } }) {
+export default function BotSettingsPage() {
+  const { id } = useParams();
   const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -40,7 +41,7 @@ export default function BotSettingsPage({ params }: { params: { id: string } }) 
     const fetchBot = async () => {
       try {
         const bots = await getBots();
-        const currentBot = bots.find((b) => b.id === parseInt(params.id));
+        const currentBot = bots.find((b) => b.id === parseInt(id as string));
         if (currentBot) {
           setBot(currentBot);
           form.reset({
@@ -60,12 +61,12 @@ export default function BotSettingsPage({ params }: { params: { id: string } }) 
     };
 
     fetchBot();
-  }, [params.id, form, toast]);
+  }, [id, form, toast]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       if (!bot) return;
-      
+
       await updateBot(bot.id, {
         name: values.name,
         description: values.description,
@@ -81,7 +82,8 @@ export default function BotSettingsPage({ params }: { params: { id: string } }) 
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.response?.data?.message || "Failed to update bot settings",
+        description:
+          error.response?.data?.message || "Failed to update bot settings",
       });
     }
   };

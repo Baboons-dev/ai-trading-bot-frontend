@@ -10,6 +10,7 @@ import {
   Repeat2,
   ArrowLeft,
   Settings,
+  UserCircle,
 } from "lucide-react";
 import {
   LineChart,
@@ -24,6 +25,12 @@ import Image from "next/image";
 import { useAuthStore } from "@/lib/store/use-store";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const data = [
   { name: "Mon", tweets: 4, engagement: 120 },
@@ -63,6 +70,7 @@ export default function Dashboard() {
   const { setToken } = useAuthStore();
   const { toast } = useToast();
   const router = useRouter();
+  const id = localStorage.getItem("twitter_connect_bot_id");
 
   const handleLogout = () => {
     try {
@@ -95,25 +103,36 @@ export default function Dashboard() {
             <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              className="gap-2"
-              onClick={() => router.push("/settings")}
-            >
-              <Settings className="w-4 h-4" />
-              Settings
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="gap-2">
+                  <UserCircle className="w-4 h-4" />
+                  Profile
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => router.push("/settings")}>
+                  <Settings className="w-4 h-4 mr-2" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => router.push(`/bot-settings/${id}`)}
+                >
+                  <Twitter className="w-4 h-4 mr-2" />
+                  Bot Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button variant="outline" className="gap-2">
               <Twitter className="w-4 h-4" />
               View on Twitter
-            </Button>
-            <Button
-              variant="outline"
-              className="gap-2 hover:bg-destructive hover:text-destructive-foreground"
-              onClick={handleLogout}
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Logout
             </Button>
           </div>
         </div>
