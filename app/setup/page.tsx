@@ -159,13 +159,7 @@ export default function Setup() {
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-4">
-            <Link href="/signup">
-              <Button variant="ghost">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </Button>
-            </Link>
+          <div className="flex items-center justify-end pt-4">
             <Button
               type="submit"
               disabled={loading}
