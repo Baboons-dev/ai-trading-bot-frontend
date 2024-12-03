@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Twitter,
   BarChart3,
   MessageCircle,
   Users,
   Repeat2,
-} from 'lucide-react';
+  ArrowLeft,
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -17,60 +18,104 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from 'recharts';
-import Image from 'next/image';
+} from "recharts";
+import Image from "next/image";
+import { useAuthStore } from "@/lib/store/use-store";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const data = [
-  { name: 'Mon', tweets: 4, engagement: 120 },
-  { name: 'Tue', tweets: 3, engagement: 98 },
-  { name: 'Wed', tweets: 5, engagement: 260 },
-  { name: 'Thu', tweets: 4, engagement: 380 },
-  { name: 'Fri', tweets: 3, engagement: 430 },
-  { name: 'Sat', tweets: 4, engagement: 520 },
-  { name: 'Sun', tweets: 5, engagement: 489 },
+  { name: "Mon", tweets: 4, engagement: 120 },
+  { name: "Tue", tweets: 3, engagement: 98 },
+  { name: "Wed", tweets: 5, engagement: 260 },
+  { name: "Thu", tweets: 4, engagement: 380 },
+  { name: "Fri", tweets: 3, engagement: 430 },
+  { name: "Sat", tweets: 4, engagement: 520 },
+  { name: "Sun", tweets: 5, engagement: 489 },
 ];
 
 const recentTweets = [
   {
     id: 1,
-    content: 'Just discovered a new JavaScript trick that will blow your mind! 🤯 #CodeTips',
+    content:
+      "Just discovered a new JavaScript trick that will blow your mind! 🤯 #CodeTips",
     engagement: 145,
-    time: '2h ago',
+    time: "2h ago",
   },
   {
     id: 2,
-    content: 'Why did the programmer quit his job? Because he didn\'t get arrays! 😄 #ProgrammingHumor',
+    content:
+      "Why did the programmer quit his job? Because he didn't get arrays! 😄 #ProgrammingHumor",
     engagement: 89,
-    time: '4h ago',
+    time: "4h ago",
   },
   {
     id: 3,
-    content: 'Here\'s your daily reminder to commit your code and drink water! 💧 #DeveloperLife',
+    content:
+      "Here's your daily reminder to commit your code and drink water! 💧 #DeveloperLife",
     engagement: 234,
-    time: '6h ago',
+    time: "6h ago",
   },
 ];
 
 export default function Dashboard() {
+  const { setToken } = useAuthStore();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh_token");
+      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+      setToken(null);
+
+      router.push("/login");
+
+      toast({
+        title: "Success",
+        description: "Logged out successfully",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to logout",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image src={'/logo.svg'} alt={'logo'} width={28} height={28} />
+            <Image src={"/logo.svg"} alt={"logo"} width={28} height={28} />
             <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
           </div>
-          <Button variant="outline" className="gap-2">
-            <Twitter className="w-4 h-4" />
-            View on Twitter
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button variant="outline" className="gap-2">
+              <Twitter className="w-4 h-4" />
+              View on Twitter
+            </Button>
+            <Button
+              variant="outline"
+              className="gap-2 hover:bg-destructive hover:text-destructive-foreground"
+              onClick={handleLogout}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="p-4 bg-secondary/50 backdrop-blur">
             <div className="flex items-center gap-2">
               <MessageCircle className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">Total Tweets</span>
+              <span className="text-sm text-muted-foreground">
+                Total Tweets
+              </span>
             </div>
             <p className="text-2xl font-bold mt-2">284</p>
           </Card>
@@ -94,7 +139,9 @@ export default function Dashboard() {
           <Card className="p-4 bg-secondary/50 backdrop-blur">
             <div className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">Engagement Rate</span>
+              <span className="text-sm text-muted-foreground">
+                Engagement Rate
+              </span>
             </div>
             <p className="text-2xl font-bold mt-2">4.8%</p>
           </Card>
@@ -111,9 +158,9 @@ export default function Dashboard() {
                   <YAxis stroke="#666" />
                   <Tooltip
                     contentStyle={{
-                      background: 'rgba(0,0,0,0.8)',
-                      border: '1px solid #333',
-                      borderRadius: '4px',
+                      background: "rgba(0,0,0,0.8)",
+                      border: "1px solid #333",
+                      borderRadius: "4px",
                     }}
                   />
                   <Line
