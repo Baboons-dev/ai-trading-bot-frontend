@@ -17,13 +17,27 @@ export function DashboardHeader() {
   const router = useRouter();
   const { logout } = useAuthStore();
 
-  const handleLogout = () => {
-    logout();
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-    router.push("/");
-    router.refresh();
+  const handleLogout = async () => {
+    try {
+      // First clear the auth state
+      logout();
+
+      // Clear the token cookie
+      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+
+      // Force a complete page reload and navigation
+      window.location.href = "/";
+
+      // Clear any cached data
+      localStorage.clear();
+      sessionStorage.clear();
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback: force navigation even if there's an error
+      window.location.href = "/";
+    }
   };
-  
+
   return (
     <div className="fixed top-0 w-full h-16 px-4 border-b shadow-sm bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center justify-between h-full max-w-6xl mx-auto">
@@ -53,7 +67,12 @@ export function DashboardHeader() {
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleLogout}>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                  handleLogout();
+                }}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>

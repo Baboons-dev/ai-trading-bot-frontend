@@ -74,7 +74,6 @@ export default function Dashboard() {
   const [id, setId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Access localStorage after component mounts
     const botId = localStorage.getItem("twitter_connect_bot_id");
     setId(botId);
   }, []);
@@ -118,10 +117,6 @@ export default function Dashboard() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => router.push("/settings")}>
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => router.push(`/bot-settings/${id}`)}
                 >
