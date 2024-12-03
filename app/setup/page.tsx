@@ -6,33 +6,27 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Bot, Twitter, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   createBot,
   connectTwitter,
   completeTwitterAuth,
-  getBots,
 } from "@/api/apiCalls/bot";
 import { useToast } from "@/components/ui/use-toast";
 import { Suspense } from "react";
-import { TwitterBot } from "@/types/bot";
 
 function SetupForm() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [botCreated, setBotCreated] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [userBots, setUserBots] = useState<TwitterBot[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
   });
-
-  const [fieldsDisabled, setFieldsDisabled] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,52 +78,6 @@ function SetupForm() {
     }
   };
 
-  useEffect(() => {
-    const handleTwitterCallback = async () => {
-      const oauth_verifier = searchParams.get("oauth_verifier");
-      const oauth_token = searchParams.get("oauth_token");
-      const bot_id = localStorage.getItem("twitter_connect_bot_id");
-
-      if (oauth_verifier && oauth_token && bot_id) {
-        try {
-          const response = await completeTwitterAuth({
-            oauth_verifier,
-            oauth_token,
-            bot_id,
-          });
-
-          if (response.status === "success") {
-            const bot = response.bot;
-            console.log("Bot data received:", bot);
-
-            setFormData({
-              name: bot.name,
-              description: bot.description,
-            });
-            setFieldsDisabled(true);
-            setBotCreated(true);
-
-            toast({
-              title: "Success",
-              description: "Twitter successfully connected!",
-            });
-          }
-        } catch (error: any) {
-          console.error("Twitter connection error:", error);
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to connect Twitter account",
-          });
-        } finally {
-          localStorage.removeItem("twitter_connect_bot_id");
-        }
-      }
-    };
-
-    handleTwitterCallback();
-  }, [searchParams, toast]);
-
   return (
     <main className="container mx-auto px-4 min-h-screen py-12">
       <Card className="max-w-2xl mx-auto p-6 bg-secondary/50 backdrop-blur border-primary/20">
@@ -148,7 +96,6 @@ function SetupForm() {
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, name: e.target.value }))
               }
-              disabled={fieldsDisabled}
               required
             />
           </div>
@@ -166,7 +113,6 @@ function SetupForm() {
                   description: e.target.value,
                 }))
               }
-              disabled={fieldsDisabled}
               required
             />
             <p className="text-sm text-muted-foreground">
@@ -176,18 +122,12 @@ function SetupForm() {
           </div>
 
           <div className="flex items-center justify-end pt-4">
-            <Button
-              type="submit"
-              disabled={loading}
-              onClick={botCreated ? () => router.push("/dashboard") : undefined}
-            >
+            <Button type="submit" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  {botCreated ? "Loading..." : "Creating Bot..."}
+                  Creating Bot...
                 </>
-              ) : botCreated ? (
-                "Next"
               ) : (
                 "Create Bot"
               )}

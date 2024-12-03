@@ -24,7 +24,7 @@ import {
 import Image from "next/image";
 import { useAuthStore } from "@/lib/store/use-store";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useState, useEffect } from "react";
+import { completeTwitterAuth } from "@/api/apiCalls/bot";
 
 const data = [
   { name: "Mon", tweets: 4, engagement: 120 },
@@ -72,11 +73,46 @@ export default function Dashboard() {
   const { toast } = useToast();
   const router = useRouter();
   const [id, setId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const botId = localStorage.getItem("twitter_connect_bot_id");
     setId(botId);
-  }, []);
+
+    const handleTwitterCallback = async () => {
+      const oauth_verifier = searchParams.get("oauth_verifier");
+      const oauth_token = searchParams.get("oauth_token");
+      const bot_id = localStorage.getItem("twitter_connect_bot_id");
+
+      if (oauth_verifier && oauth_token && bot_id) {
+        try {
+          const response = await completeTwitterAuth({
+            oauth_verifier,
+            oauth_token,
+            bot_id,
+          });
+
+          if (response.status === "success") {
+            toast({
+              title: "Success",
+              description: "Twitter successfully connected!",
+            });
+          }
+        } catch (error: any) {
+          console.error("Twitter connection error:", error);
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to connect Twitter account",
+          });
+        } finally {
+          localStorage.removeItem("twitter_connect_bot_id");
+        }
+      }
+    };
+
+    handleTwitterCallback();
+  }, [searchParams, toast]);
 
   const handleLogout = () => {
     try {
