@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,12 +15,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
-import { signup } from "@/api/apiCalls/user";
-import { useAuthStore } from "@/lib/store/use-store";
-import { ClientOnly } from "@/components/client-only";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
+import { signup } from '@/api/apiCalls/user';
+import { useAuthStore } from '@/lib/store/use-store';
+import { ClientOnly } from '@/components/client-only';
+
 const formSchema = z
   .object({
     name: z.string().min(2),
@@ -29,8 +30,8 @@ const formSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
+    message: 'Passwords don\'t match',
+    path: ['confirmPassword'],
   });
 
 export default function SignupPage() {
@@ -42,10 +43,10 @@ export default function SignupPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -59,21 +60,21 @@ export default function SignupPage() {
       });
 
       // Store tokens
-      localStorage.setItem("token", response.data.access_token);
-      localStorage.setItem("refresh_token", response.data.refresh_token);
-      
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('refresh_token', response.data.refresh_token);
+
       document.cookie = `token=${response.data.access_token}; path=/`;
       // Only set the token, useAuth hook will fetch the user
       setToken(response.data.access_token);
 
       // Redirect directly to dashboard
-      router.push("/dashboard");
+      router.push('/dashboard');
     } catch (error: any) {
       toast({
-        variant: "destructive",
-        title: "Error",
+        variant: 'destructive',
+        title: 'Error',
         description:
-          error.response?.data?.message || "Failed to create account",
+          error.response?.data?.message || 'Failed to create account',
       });
     } finally {
       setLoading(false);
@@ -144,13 +145,13 @@ export default function SignupPage() {
               )}
             />
             <Button className="w-full" type="submit" disabled={loading}>
-              {loading ? "Creating account..." : "Create account"}
+              {loading ? 'Creating account...' : 'Create account'}
             </Button>
           </form>
         </Form>
         <div className="text-center text-sm">
           <p className="text-muted-foreground">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link href="/login" className="text-primary hover:underline">
               Sign in
             </Link>
