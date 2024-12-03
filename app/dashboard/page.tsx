@@ -31,6 +31,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState, useEffect } from "react";
 
 const data = [
   { name: "Mon", tweets: 4, engagement: 120 },
@@ -70,7 +71,13 @@ export default function Dashboard() {
   const { setToken } = useAuthStore();
   const { toast } = useToast();
   const router = useRouter();
-  const id = localStorage.getItem("twitter_connect_bot_id");
+  const [id, setId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Access localStorage after component mounts
+    const botId = localStorage.getItem("twitter_connect_bot_id");
+    setId(botId);
+  }, []);
 
   const handleLogout = () => {
     try {
