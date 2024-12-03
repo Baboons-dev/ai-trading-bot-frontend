@@ -9,6 +9,7 @@ import {
   Users,
   Repeat2,
   ArrowLeft,
+  Settings,
 } from "lucide-react";
 import {
   LineChart,
@@ -94,6 +95,14 @@ export default function Dashboard() {
             <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
           </div>
           <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              className="gap-2"
+              onClick={() => router.push("/settings")}
+            >
+              <Settings className="w-4 h-4" />
+              Settings
+            </Button>
             <Button variant="outline" className="gap-2">
               <Twitter className="w-4 h-4" />
               View on Twitter
