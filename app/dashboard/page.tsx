@@ -23,7 +23,7 @@ import {
 } from "recharts";
 import Image from "next/image";
 import { useAuthStore } from "@/lib/store/use-store";
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   DropdownMenu,
@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useState, useEffect } from "react";
 import { completeTwitterAuth } from "@/api/apiCalls/bot";
+import { Suspense } from "react";
 
 const data = [
   { name: "Mon", tweets: 4, engagement: 120 },
@@ -68,17 +69,11 @@ const recentTweets = [
   },
 ];
 
-export default function Dashboard() {
-  const { setToken } = useAuthStore();
+function TwitterAuthHandler() {
   const { toast } = useToast();
-  const router = useRouter();
-  const [id, setId] = useState<string | null>(null);
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const botId = localStorage.getItem("twitter_connect_bot_id");
-    setId(botId);
-
     const handleTwitterCallback = async () => {
       const oauth_verifier = searchParams.get("oauth_verifier");
       const oauth_token = searchParams.get("oauth_token");
@@ -114,6 +109,19 @@ export default function Dashboard() {
     handleTwitterCallback();
   }, [searchParams, toast]);
 
+  return null;
+}
+
+export default function Dashboard() {
+  const { setToken } = useAuthStore();
+  const router = useRouter();
+  const [id, setId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const botId = localStorage.getItem("twitter_connect_bot_id");
+    setId(botId);
+  }, []);
+
   const handleLogout = () => {
     try {
       localStorage.removeItem("token");
@@ -137,125 +145,130 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image src={"/logo.svg"} alt={"logo"} width={28} height={28} />
-            <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="min-h-screen p-8">
+        <TwitterAuthHandler />
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Image src={"/logo.svg"} alt={"logo"} width={28} height={28} />
+              <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
+            </div>
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="gap-2">
+                    <UserCircle className="w-4 h-4" />
+                    Profile
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/bot-settings/${id}`)}
+                  >
+                    <Twitter className="w-4 h-4 mr-2" />
+                    Bot Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button variant="outline" className="gap-2">
+                <Twitter className="w-4 h-4" />
+                View on Twitter
+              </Button>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                  <UserCircle className="w-4 h-4" />
-                  Profile
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem
-                  onClick={() => router.push(`/bot-settings/${id}`)}
-                >
-                  <Twitter className="w-4 h-4 mr-2" />
-                  Bot Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="text-destructive focus:text-destructive"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button variant="outline" className="gap-2">
-              <Twitter className="w-4 h-4" />
-              View on Twitter
-            </Button>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card className="p-4 bg-secondary/50 backdrop-blur">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-primary" />
+                <span className="text-sm text-muted-foreground">
+                  Total Tweets
+                </span>
+              </div>
+              <p className="text-2xl font-bold mt-2">284</p>
+            </Card>
+
+            <Card className="p-4 bg-secondary/50 backdrop-blur">
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary" />
+                <span className="text-sm text-muted-foreground">Followers</span>
+              </div>
+              <p className="text-2xl font-bold mt-2">1,249</p>
+            </Card>
+
+            <Card className="p-4 bg-secondary/50 backdrop-blur">
+              <div className="flex items-center gap-2">
+                <Repeat2 className="w-4 h-4 text-primary" />
+                <span className="text-sm text-muted-foreground">Retweets</span>
+              </div>
+              <p className="text-2xl font-bold mt-2">892</p>
+            </Card>
+
+            <Card className="p-4 bg-secondary/50 backdrop-blur">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-primary" />
+                <span className="text-sm text-muted-foreground">
+                  Engagement Rate
+                </span>
+              </div>
+              <p className="text-2xl font-bold mt-2">4.8%</p>
+            </Card>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="p-4 bg-secondary/50 backdrop-blur">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">
-                Total Tweets
-              </span>
-            </div>
-            <p className="text-2xl font-bold mt-2">284</p>
-          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <Card className="col-span-2 p-6 bg-secondary/50 backdrop-blur">
+              <h2 className="text-lg font-semibold mb-4">
+                Engagement Overview
+              </h2>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                    <XAxis dataKey="name" stroke="#666" />
+                    <YAxis stroke="#666" />
+                    <Tooltip
+                      contentStyle={{
+                        background: "rgba(0,0,0,0.8)",
+                        border: "1px solid #333",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="engagement"
+                      stroke="hsl(0 72.2% 50.6%)"
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </Card>
 
-          <Card className="p-4 bg-secondary/50 backdrop-blur">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">Followers</span>
-            </div>
-            <p className="text-2xl font-bold mt-2">1,249</p>
-          </Card>
-
-          <Card className="p-4 bg-secondary/50 backdrop-blur">
-            <div className="flex items-center gap-2">
-              <Repeat2 className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">Retweets</span>
-            </div>
-            <p className="text-2xl font-bold mt-2">892</p>
-          </Card>
-
-          <Card className="p-4 bg-secondary/50 backdrop-blur">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground">
-                Engagement Rate
-              </span>
-            </div>
-            <p className="text-2xl font-bold mt-2">4.8%</p>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Card className="col-span-2 p-6 bg-secondary/50 backdrop-blur">
-            <h2 className="text-lg font-semibold mb-4">Engagement Overview</h2>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                  <XAxis dataKey="name" stroke="#666" />
-                  <YAxis stroke="#666" />
-                  <Tooltip
-                    contentStyle={{
-                      background: "rgba(0,0,0,0.8)",
-                      border: "1px solid #333",
-                      borderRadius: "4px",
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="engagement"
-                    stroke="hsl(0 72.2% 50.6%)"
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </Card>
-
-          <Card className="p-6 bg-secondary/50 backdrop-blur">
-            <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
-            <div className="space-y-4">
-              {recentTweets.map((tweet) => (
-                <Card key={tweet.id} className="p-4 bg-muted">
-                  <p className="text-sm mb-2">{tweet.content}</p>
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{tweet.engagement} engagements</span>
-                    <span>{tweet.time}</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </Card>
+            <Card className="p-6 bg-secondary/50 backdrop-blur">
+              <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
+              <div className="space-y-4">
+                {recentTweets.map((tweet) => (
+                  <Card key={tweet.id} className="p-4 bg-muted">
+                    <p className="text-sm mb-2">{tweet.content}</p>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>{tweet.engagement} engagements</span>
+                      <span>{tweet.time}</span>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </Suspense>
   );
 }
