@@ -15,8 +15,9 @@ import {
   completeTwitterAuth,
 } from "@/api/apiCalls/bot";
 import { useToast } from "@/components/ui/use-toast";
+import { Suspense } from "react";
 
-export default function Setup() {
+function SetupForm() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [botCreated, setBotCreated] = useState(false);
@@ -58,7 +59,6 @@ export default function Setup() {
           });
         } finally {
           localStorage.removeItem("twitter_connect_bot_id");
-          // Don't redirect here, just let user click "Next"
         }
       }
     };
@@ -180,5 +180,23 @@ export default function Setup() {
         </form>
       </Card>
     </main>
+  );
+}
+
+export default function Setup() {
+  return (
+    <Suspense
+      fallback={
+        <main className="container mx-auto px-4 min-h-screen py-12">
+          <Card className="max-w-2xl mx-auto p-6 bg-secondary/50 backdrop-blur border-primary/20">
+            <div className="flex items-center justify-center">
+              <Loader2 className="w-8 h-8 animate-spin" />
+            </div>
+          </Card>
+        </main>
+      }
+    >
+      <SetupForm />
+    </Suspense>
   );
 }
