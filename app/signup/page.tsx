@@ -15,6 +15,7 @@ import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
 import { signup } from "@/api/apiCalls/user";
 import { useAuthStore } from "@/lib/store/use-store";
+import { WalletButton } from "@/components/ui/wallet-button";
 
 const formSchema = z.object({
   name: z.string().min(2),
@@ -26,6 +27,7 @@ export default function SignUp() {
   const { toast } = useToast();
   const { setToken } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  const [walletLoading, setWalletLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,6 +63,27 @@ export default function SignUp() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleWalletConnect = async () => {
+    try {
+      setWalletLoading(true);
+      // Simulate wallet connection delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      
+      toast({
+        title: "Not Implemented",
+        description: "Wallet connection will be implemented by you",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to connect wallet",
+      });
+    } finally {
+      setWalletLoading(false);
     }
   };
 
@@ -116,6 +139,30 @@ export default function SignUp() {
             )}
           </div>
 
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              "Continue"
+            )}
+          </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <WalletButton onClick={handleWalletConnect} loading={walletLoading} />
+
           <div className="flex items-center justify-between pt-4">
             <Link href="/public">
               <Button variant="ghost">
@@ -123,16 +170,6 @@ export default function SignUp() {
                 Back
               </Button>
             </Link>
-            <Button type="submit" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                "Continue"
-              )}
-            </Button>
           </div>
 
           <div className="text-center pt-4">
