@@ -99,21 +99,16 @@ function SetupForm() {
           });
 
           if (response.status === "success") {
-            const bots = await getBots();
-            setUserBots(bots);
-            setBotCreated(true);
-            if (bots.length > 0) {
-              const createdBot = bots.find(
-                (bot) => bot.id.toString() === bot_id
-              );
-              if (createdBot) {
-                setFormData({
-                  name: createdBot.name,
-                  description: createdBot.description,
-                });
-              }
-            }
+            const bot = response.bot;
+            console.log("Bot data received:", bot);
+
+            setFormData({
+              name: bot.name,
+              description: bot.description,
+            });
             setFieldsDisabled(true);
+            setBotCreated(true);
+
             toast({
               title: "Success",
               description: "Twitter successfully connected!",
