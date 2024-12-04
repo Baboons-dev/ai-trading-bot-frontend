@@ -1,5 +1,5 @@
 import { axios } from "..";
-import { User, LoginCredentials, SignupCredentials, AuthResponse } from "@/types/user";
+import { User, LoginCredentials, SignupCredentials, AuthResponse, TwitterStats } from "@/types/user";
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>("/api/user/login/", credentials);
@@ -13,5 +13,15 @@ export const signup = async (credentials: SignupCredentials): Promise<AuthRespon
 
 export const GetUser = async (): Promise<User> => {
   const response = await axios.get<User>("/api/user/current/");
+  return response.data;
+};
+
+export const GetTwitterStats = async (id: number): Promise<TwitterStats> => {
+  const response = await axios.get<TwitterStats>(`/api/user/twitter-stats/${id}`);
+  return response.data;
+};
+
+export const FetchTwitterStats = async (id: number): Promise<TwitterStats> => {
+  const response = await axios.get<TwitterStats>(`/api/user/twitter-stats/fetch/${id}`);
   return response.data;
 };

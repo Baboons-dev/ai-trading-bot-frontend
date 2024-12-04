@@ -34,40 +34,25 @@ import {
 import { useState, useEffect } from "react";
 import { completeTwitterAuth, getBots } from "@/api/apiCalls/bot";
 import { Suspense } from "react";
+import { FetchTwitterStats, GetTwitterStats } from "@/api/apiCalls/user";
+import { TwitterStats } from "@/types/user";
 
-const data = [
-  { name: "Mon", tweets: 4, engagement: 120 },
-  { name: "Tue", tweets: 3, engagement: 98 },
-  { name: "Wed", tweets: 5, engagement: 260 },
-  { name: "Thu", tweets: 4, engagement: 380 },
-  { name: "Fri", tweets: 3, engagement: 430 },
-  { name: "Sat", tweets: 4, engagement: 520 },
-  { name: "Sun", tweets: 5, engagement: 489 },
-];
+function timeAgo(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const secondsAgo = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-const recentTweets = [
-  {
-    id: 1,
-    content:
-      "Just discovered a new JavaScript trick that will blow your mind! 🤯 #CodeTips",
-    engagement: 145,
-    time: "2h ago",
-  },
-  {
-    id: 2,
-    content:
-      "Why did the programmer quit his job? Because he didn't get arrays! 😄 #ProgrammingHumor",
-    engagement: 89,
-    time: "4h ago",
-  },
-  {
-    id: 3,
-    content:
-      "Here's your daily reminder to commit your code and drink water! 💧 #DeveloperLife",
-    engagement: 234,
-    time: "6h ago",
-  },
-];
+  if (secondsAgo < 60) return `${secondsAgo}s ago`;
+  const minutesAgo = Math.floor(secondsAgo / 60);
+  if (minutesAgo < 60) return `${minutesAgo}m ago`;
+  const hoursAgo = Math.floor(minutesAgo / 60);
+  if (hoursAgo < 24) return `${hoursAgo}h ago`;
+  const daysAgo = Math.floor(hoursAgo / 24);
+  if (daysAgo < 30) return `${daysAgo}d ago`;
+  const monthsAgo = Math.floor(daysAgo / 30);
+  if (monthsAgo < 12) return `${monthsAgo}mo ago`;
+  return `${Math.floor(monthsAgo / 12)}y ago`;
+}
 
 function TwitterAuthHandler() {
   const { toast } = useToast();
@@ -116,6 +101,7 @@ export default function Dashboard() {
   const { setToken } = useAuthStore();
   const router = useRouter();
   const [id, setId] = useState<string | null>(null);
+  const [twitterStats, setTwitterStats] = useState<TwitterStats | null>(null);
 
   useEffect(() => {
     const fetchBotId = async () => {
@@ -138,6 +124,39 @@ export default function Dashboard() {
 
     fetchBotId();
   }, []);
+
+  useEffect(() => {
+    const fetchTwitterStats = async () => {
+      if (!id) return;
+
+      try {
+        await FetchTwitterStats(Number(id));
+      } catch (error: any) {
+        if (error?.response?.status !== 429) {
+          console.error("Failed to fetch latest Twitter stats:", error);
+        }
+      }
+
+      try {
+        const stats = await GetTwitterStats(Number(id));
+        setTwitterStats(stats);
+      } catch (error) {
+        console.error("Failed to fetch stored Twitter stats:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch Twitter stats",
+        });
+      }
+    };
+
+    if (id) {
+      fetchTwitterStats();
+      const interval = setInterval(fetchTwitterStats, 30 * 60 * 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [id]);
 
   const handleLogout = () => {
     try {
@@ -210,7 +229,9 @@ export default function Dashboard() {
                   Total Tweets
                 </span>
               </div>
-              <p className="text-2xl font-bold mt-2">284</p>
+              <p className="text-2xl font-bold mt-2">
+                {twitterStats?.total_tweets || 0}
+              </p>
             </Card>
 
             <Card className="p-4 bg-secondary/50 backdrop-blur">
@@ -218,7 +239,9 @@ export default function Dashboard() {
                 <Users className="w-4 h-4 text-primary" />
                 <span className="text-sm text-muted-foreground">Followers</span>
               </div>
-              <p className="text-2xl font-bold mt-2">1,249</p>
+              <p className="text-2xl font-bold mt-2">
+                {twitterStats?.total_followers || 0}
+              </p>
             </Card>
 
             <Card className="p-4 bg-secondary/50 backdrop-blur">
@@ -226,7 +249,9 @@ export default function Dashboard() {
                 <Repeat2 className="w-4 h-4 text-primary" />
                 <span className="text-sm text-muted-foreground">Retweets</span>
               </div>
-              <p className="text-2xl font-bold mt-2">892</p>
+              <p className="text-2xl font-bold mt-2">
+                {twitterStats?.total_retweets || 0}
+              </p>
             </Card>
 
             <Card className="p-4 bg-secondary/50 backdrop-blur">
@@ -236,48 +261,22 @@ export default function Dashboard() {
                   Engagement Rate
                 </span>
               </div>
-              <p className="text-2xl font-bold mt-2">4.8%</p>
+              <p className="text-2xl font-bold mt-2">
+                {twitterStats?.engagement_rate || 0}%
+              </p>
             </Card>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <Card className="col-span-2 p-6 bg-secondary/50 backdrop-blur">
-              <h2 className="text-lg font-semibold mb-4">
-                Engagement Overview
-              </h2>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                    <XAxis dataKey="name" stroke="#666" />
-                    <YAxis stroke="#666" />
-                    <Tooltip
-                      contentStyle={{
-                        background: "rgba(0,0,0,0.8)",
-                        border: "1px solid #333",
-                        borderRadius: "4px",
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="engagement"
-                      stroke="hsl(0 72.2% 50.6%)"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-
-            <Card className="p-6 bg-secondary/50 backdrop-blur">
+            <Card className="col-span-3 p-6 bg-secondary/50 backdrop-blur">
               <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
               <div className="space-y-4">
-                {recentTweets.map((tweet) => (
-                  <Card key={tweet.id} className="p-4 bg-muted">
-                    <p className="text-sm mb-2">{tweet.content}</p>
+                {twitterStats?.recent_tweets.map((tweet, index) => (
+                  <Card key={index} className="p-4 bg-muted">
+                    <p className="text-sm mb-2">{tweet.text}</p>
                     <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>{tweet.engagement} engagements</span>
-                      <span>{tweet.time}</span>
+                      <span>Likes: {tweet.metrics.like_count}</span>
+                      <span>{timeAgo(tweet.created_at)}</span>
                     </div>
                   </Card>
                 ))}

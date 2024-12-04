@@ -33,3 +33,29 @@ export interface AuthResponse {
     refresh_token: string;
   };
 }
+
+export interface TweetMetrics {
+  like_count: number;
+  quote_count: number;
+  reply_count: number;
+  retweet_count: number;
+}
+
+export interface Tweet {
+  text: string;
+  metrics: TweetMetrics;
+  created_at: string;
+}
+
+export interface TwitterStats {
+  id: number;
+  total_tweets: number;
+  total_followers: number;
+  total_retweets: number;
+  engagement_rate: number;
+  recent_tweets: Tweet[];
+  created_at: string;
+  bot: number;
+}
+
+
