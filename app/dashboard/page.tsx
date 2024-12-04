@@ -302,7 +302,7 @@ export default function Dashboard() {
             <Card className="col-span-3 p-6 bg-secondary/50 backdrop-blur">
               <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
               <div className="space-y-4">
-                {twitterStats?.recent_tweets.map((tweet, index) => (
+                {twitterStats?.recent_tweets?.map((tweet, index) => (
                   <Card key={index} className="p-4 bg-muted">
                     <p className="text-sm mb-2">{tweet.text}</p>
                     <div className="flex justify-between text-xs text-muted-foreground">
@@ -310,7 +310,13 @@ export default function Dashboard() {
                       <span>{timeAgo(tweet.created_at)}</span>
                     </div>
                   </Card>
-                ))}
+                )) || (
+                  <Card className="p-4 bg-muted">
+                    <p className="text-sm text-muted-foreground">
+                      No tweets available
+                    </p>
+                  </Card>
+                )}
               </div>
             </Card>
           </div>
