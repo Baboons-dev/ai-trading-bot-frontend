@@ -34,7 +34,11 @@ import {
 import { useState, useEffect } from "react";
 import { completeTwitterAuth, getBots } from "@/api/apiCalls/bot";
 import { Suspense } from "react";
-import { FetchTwitterStats, GetTwitterStats } from "@/api/apiCalls/user";
+import {
+  FetchTwitterStats,
+  GetTwitterStats,
+  TriggerGenerateTweet,
+} from "@/api/apiCalls/user";
 import { TwitterStats } from "@/types/user";
 
 function timeAgo(dateString: string) {
@@ -180,6 +184,25 @@ export default function Dashboard() {
     }
   };
 
+  const handleGenerateTweet = async () => {
+    if (!id) return;
+
+    try {
+      await TriggerGenerateTweet(Number(id));
+      toast({
+        title: "Success",
+        description: "Tweet generation started",
+      });
+    } catch (error) {
+      console.error("Failed to generate tweet:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to generate tweet",
+      });
+    }
+  };
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="min-h-screen p-8">
@@ -191,6 +214,14 @@ export default function Dashboard() {
               <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
             </div>
             <div className="flex items-center gap-3">
+              <Button
+                onClick={handleGenerateTweet}
+                variant="outline"
+                className="gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Generate Tweet
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="gap-2">

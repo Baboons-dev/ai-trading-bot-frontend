@@ -25,3 +25,8 @@ export const FetchTwitterStats = async (id: number): Promise<TwitterStats> => {
   const response = await axios.get<TwitterStats>(`/api/user/twitter-stats/fetch/${id}`);
   return response.data;
 };
+
+export const TriggerGenerateTweet = async (id: number): Promise<void> => {
+  const response = await axios.post(`/api/user/bots/${id}/generate-tweet/`);
+  return response.data;
+};
