@@ -28,8 +28,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${roboto.variable} ${tektur.variable} font-sans`}>
-        <div className={`gradient-bg min-h-screen font-tektur`} id="root">
+      <body className={`${roboto.variable} ${tektur.variable} font-roboto bg-[#0A0A0A]`}>
+        <div className={`Layout min-h-screen font-tektur`} id="root">
           <ContextComp>
             <CasperProvider>{children}</CasperProvider>
           </ContextComp>
