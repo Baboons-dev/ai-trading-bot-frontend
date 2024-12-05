@@ -66,7 +66,9 @@ export default function Home() {
             <button>
               <Icons name="btnL" />
               <div className="inner px-[20px] min-w-[140px]">
-                <p>Sign up</p>
+                <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                  Sign up
+                </p>
               </div>
               <Icons name="btnR" />
             </button>
@@ -74,7 +76,9 @@ export default function Home() {
 
           <Link className="action-btn px-[40px]" href="/login">
             <button>
-              <p>Login</p>
+              <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                Login
+              </p>
             </button>
           </Link>
         </div>
