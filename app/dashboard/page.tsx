@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import Icons from '@/config/icon';
+import { Card } from '@/components/ui/card';
 import {
   Twitter,
   BarChart3,
@@ -11,7 +12,7 @@ import {
   ArrowLeft,
   Settings,
   UserCircle,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   LineChart,
   Line,
@@ -20,26 +21,27 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
-import Image from "next/image";
-import { useAuthStore } from "@/lib/store/use-store";
-import { toast, useToast } from "@/components/ui/use-toast";
-import { useRouter, useSearchParams } from "next/navigation";
+} from 'recharts';
+import Image from 'next/image';
+import { useAuthStore } from '@/lib/store/use-store';
+import { toast, useToast } from '@/components/ui/use-toast';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useState, useEffect } from "react";
-import { completeTwitterAuth, getBots } from "@/api/apiCalls/bot";
-import { Suspense } from "react";
+} from '@/components/ui/dropdown-menu';
+import { useState, useEffect } from 'react';
+import { completeTwitterAuth, getBots } from '@/api/apiCalls/bot';
+import { Suspense } from 'react';
 import {
   FetchTwitterStats,
   GetTwitterStats,
   TriggerGenerateTweet,
-} from "@/api/apiCalls/user";
-import { TwitterStats } from "@/types/user";
+} from '@/api/apiCalls/user';
+import { TwitterStats } from '@/types/user';
+import logo_img from '@/assets/images/logo.svg';
 
 function timeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -64,9 +66,9 @@ function TwitterAuthHandler() {
 
   useEffect(() => {
     const handleTwitterCallback = async () => {
-      const oauth_verifier = searchParams.get("oauth_verifier");
-      const oauth_token = searchParams.get("oauth_token");
-      const bot_id = localStorage.getItem("twitter_connect_bot_id");
+      const oauth_verifier = searchParams.get('oauth_verifier');
+      const oauth_token = searchParams.get('oauth_token');
+      const bot_id = localStorage.getItem('twitter_connect_bot_id');
 
       if (oauth_verifier && oauth_token && bot_id) {
         try {
@@ -76,21 +78,21 @@ function TwitterAuthHandler() {
             bot_id,
           });
 
-          if (response.status === "success") {
+          if (response.status === 'success') {
             toast({
-              title: "Success",
-              description: "Twitter successfully connected!",
+              title: 'Success',
+              description: 'Twitter successfully connected!',
             });
           }
         } catch (error: any) {
-          console.error("Twitter connection error:", error);
+          console.error('Twitter connection error:', error);
           toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Failed to connect Twitter account",
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Failed to connect Twitter account',
           });
         } finally {
-          localStorage.removeItem("twitter_connect_bot_id");
+          localStorage.removeItem('twitter_connect_bot_id');
         }
       }
     };
@@ -113,15 +115,15 @@ export default function Dashboard() {
         const bots = await getBots();
         if (bots.length > 0) {
           const botId = bots[0].id.toString();
-          localStorage.setItem("bot_id", botId);
+          localStorage.setItem('bot_id', botId);
           setId(botId);
         }
       } catch (error) {
-        console.error("Failed to fetch bots:", error);
+        console.error('Failed to fetch bots:', error);
         toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch bot information",
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to fetch bot information',
         });
       }
     };
@@ -137,7 +139,7 @@ export default function Dashboard() {
         await FetchTwitterStats(Number(id));
       } catch (error: any) {
         if (error?.response?.status !== 429) {
-          console.error("Failed to fetch latest Twitter stats:", error);
+          console.error('Failed to fetch latest Twitter stats:', error);
         }
       }
 
@@ -145,11 +147,11 @@ export default function Dashboard() {
         const stats = await GetTwitterStats(Number(id));
         setTwitterStats(stats);
       } catch (error) {
-        console.error("Failed to fetch stored Twitter stats:", error);
+        console.error('Failed to fetch stored Twitter stats:', error);
         toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch Twitter stats",
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to fetch Twitter stats',
         });
       }
     };
@@ -164,22 +166,22 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("token");
-      localStorage.removeItem("refresh_token");
-      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
       setToken(null);
 
-      router.push("/login");
+      router.push('/login');
 
       toast({
-        title: "Success",
-        description: "Logged out successfully",
+        title: 'Success',
+        description: 'Logged out successfully',
       });
     } catch (error) {
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to logout",
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to logout',
       });
     }
   };
@@ -190,68 +192,84 @@ export default function Dashboard() {
     try {
       await TriggerGenerateTweet(Number(id));
       toast({
-        title: "Success",
-        description: "Tweet generation started",
+        title: 'Success',
+        description: 'Tweet generation started',
       });
     } catch (error) {
-      console.error("Failed to generate tweet:", error);
+      console.error('Failed to generate tweet:', error);
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to generate tweet",
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to generate tweet',
       });
     }
   };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="min-h-screen p-8">
+      <div className="Dashboard-page min-h-screen px-[60px]">
         <TwitterAuthHandler />
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image src={"/logo.svg"} alt={"logo"} width={28} height={28} />
-              <h1 className="text-2xl font-bold">TechBot Dashboard</h1>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={handleGenerateTweet}
-                variant="outline"
-                className="gap-2"
-              >
-                <MessageCircle className="w-4 h-4" />
-                Generate Tweet
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
-                    <UserCircle className="w-4 h-4" />
-                    Profile
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/bot-settings/${id}`)}
-                  >
-                    <Twitter className="w-4 h-4 mr-2" />
-                    Bot Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={handleLogout}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <Button variant="outline" className="gap-2">
-                <Twitter className="w-4 h-4" />
-                View on Twitter
-              </Button>
-            </div>
+
+        <div className="Header flex items-center justify-between min-h-[70px]">
+          <div className="flex items-center gap-[10px]">
+            <Image src={logo_img} alt={'logo'} width={153} height={9999} />
+            <h2 className="font-roboto text-[28px] text-[#F20823] font-[300] leading-[normal] tracking-[normal]">
+              Dashboard
+            </h2>
           </div>
 
+          <div className="flex items-center gap-[20px]">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="action-btn">
+                  <button className="px-[40px] opacity-[0.5]">
+                    <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                      Profile
+                    </p>
+                  </button>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
+                  onClick={() => router.push(`/bot-settings/${id}`)}
+                >
+                  <Twitter className="w-4 h-4 mr-2" />
+                  Bot Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <div className="action-btn">
+              <button className="px-[40px] gap-[10px] opacity-[0.5]">
+                <Icons name="x_icon" />
+                <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                  View on Twitter
+                </p>
+              </button>
+            </div>
+
+            <div className="action-btn">
+              <button onClick={handleGenerateTweet}>
+                <Icons name="btnL" />
+                <div className="inner px-[20px] min-w-[140px]">
+                  <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                    Generate Tweet
+                  </p>
+                </div>
+                <Icons name="btnR" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="page-inner-wrap flex flex-col mt-[40px]">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card className="p-4 bg-secondary/50 backdrop-blur">
               <div className="flex items-center gap-2">
