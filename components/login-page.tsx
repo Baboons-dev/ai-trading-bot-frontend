@@ -102,15 +102,6 @@ export default function Login() {
 
       router.push('/dashboard');
     });
-    clickRef?.on('csprclick:switched_account', async (evt) => {
-      console.log(evt.account);
-    });
-    clickRef?.on('csprclick:signed_out', async () => {
-      console.log(null);
-    });
-    clickRef?.on('csprclick:disconnected', async () => {
-      console.log(null);
-    });
   }, [clickRef?.on]);
 
   return (
