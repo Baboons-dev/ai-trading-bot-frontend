@@ -207,7 +207,7 @@ export default function Dashboard() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="Dashboard-page min-h-screen px-[60px]">
+      <div className="Dashboard-page min-h-screen px-[60px] max-w-[1920px] mx-[auto]">
         <TwitterAuthHandler />
 
         <div className="Header flex items-center justify-between min-h-[70px]">
@@ -269,54 +269,70 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="page-inner-wrap flex flex-col mt-[40px]">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="p-4 bg-secondary/50 backdrop-blur">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-4 h-4 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  Total Tweets
-                </span>
-              </div>
-              <p className="text-2xl font-bold mt-2">
+        <div className="page-inner-wrap flex flex-col mt-[40px] max-w-[1280px] mx-[auto]">
+          <div className="user-stat-wrap grid grid-cols-1 md:grid-cols-4 gap-[20px]">
+            <div
+              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
+              style={{
+                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                border: '1px solid #222223',
+              }}
+            >
+              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
+                Total Tweets
+              </h3>
+              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
                 {twitterStats?.total_tweets || 0}
               </p>
-            </Card>
+            </div>
 
-            <Card className="p-4 bg-secondary/50 backdrop-blur">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-primary" />
-                <span className="text-sm text-muted-foreground">Followers</span>
-              </div>
-              <p className="text-2xl font-bold mt-2">
+            <div
+              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
+              style={{
+                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                border: '1px solid #222223',
+              }}
+            >
+              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
+                Followers
+              </h3>
+              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
                 {twitterStats?.total_followers || 0}
               </p>
-            </Card>
+            </div>
 
-            <Card className="p-4 bg-secondary/50 backdrop-blur">
-              <div className="flex items-center gap-2">
-                <Repeat2 className="w-4 h-4 text-primary" />
-                <span className="text-sm text-muted-foreground">Retweets</span>
-              </div>
-              <p className="text-2xl font-bold mt-2">
+            <div
+              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
+              style={{
+                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                border: '1px solid #222223',
+              }}
+            >
+              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
+                Retweets
+              </h3>
+              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
                 {twitterStats?.total_retweets || 0}
               </p>
-            </Card>
+            </div>
 
-            <Card className="p-4 bg-secondary/50 backdrop-blur">
-              <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  Engagement Rate
-                </span>
-              </div>
-              <p className="text-2xl font-bold mt-2">
+            <div
+              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
+              style={{
+                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                border: '1px solid #222223',
+              }}
+            >
+              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
+                Engagement Rate
+              </h3>
+              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
                 {twitterStats?.engagement_rate || 0}%
               </p>
-            </Card>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="recent-tweets-wrap grid grid-cols-1 lg:grid-cols-3 gap-8 mt-[40px]">
             <Card className="col-span-3 p-6 bg-secondary/50 backdrop-blur">
               <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
               <div className="space-y-4">
