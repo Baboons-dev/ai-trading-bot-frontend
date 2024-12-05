@@ -84,6 +84,7 @@ export default function Login() {
   useEffect(() => {
     clickRef?.on('csprclick:signed_in', async (evt) => {
       try {
+        setWalletLoading(true);
         const loginMessage = await getSignatureMessage(evt.account.public_key);
         const signed = await clickRef.signMessage(
           loginMessage.message,
@@ -103,10 +104,13 @@ export default function Login() {
 
         router.push('/dashboard');
       } catch (e) {
+        console.log(e);
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
         document.cookie = ``;
         setToken('');
+      } finally {
+        setWalletLoading(false);
       }
     });
   }, [clickRef?.on]);
