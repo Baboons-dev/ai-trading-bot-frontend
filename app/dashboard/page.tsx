@@ -333,26 +333,55 @@ export default function Dashboard() {
           </div>
 
           <div className="recent-tweets-wrap grid grid-cols-1 lg:grid-cols-3 gap-8 mt-[40px]">
-            <Card className="col-span-3 p-6 bg-secondary/50 backdrop-blur">
-              <h2 className="text-lg font-semibold mb-4">Recent Tweets</h2>
-              <div className="space-y-4">
+            <div
+              className="item-wrap col-span-3 p-[40px] bg-[#000]"
+              style={{
+                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                border: '1px solid #222223',
+              }}
+            >
+              <h2 className="font-tektur text-[24px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                Recent Tweets
+              </h2>
+
+              <div className="tweet-container flex flex-col mt-[40px] gap-[10px]">
                 {twitterStats?.recent_tweets?.map((tweet, index) => (
-                  <Card key={index} className="p-4 bg-muted">
-                    <p className="text-sm mb-2">{tweet.text}</p>
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Likes: {tweet.metrics.like_count}</span>
-                      <span>{timeAgo(tweet.created_at)}</span>
+                  <div
+                    key={index}
+                    className="card-item flex flex-col gap-[15px] py-[15px] px-[20px] bg-[#000]"
+                    style={{
+                      boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                      border: '1px solid #222223',
+                    }}
+                  >
+                    <p className="font-roboto text-[16px] text-[#ffffff] font-[300] leading-[normal] tracking-[normal]">
+                      {tweet.text}
+                    </p>
+
+                    <div className="text-wrap flex justify-between">
+                      <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
+                        Likes: {tweet.metrics.like_count}
+                      </h4>
+                      <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
+                        {timeAgo(tweet.created_at)}
+                      </h4>
                     </div>
-                  </Card>
+                  </div>
                 )) || (
-                  <Card className="p-4 bg-muted">
-                    <p className="text-sm text-muted-foreground">
+                  <div
+                    className="card-item py-[15px] px-[20px] bg-[#000]"
+                    style={{
+                      boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+                      border: '1px solid #222223',
+                    }}
+                  >
+                    <p className="font-roboto text-[16px] text-[#ffffff] font-[300] leading-[normal] tracking-[normal]">
                       No tweets available
                     </p>
-                  </Card>
+                  </div>
                 )}
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </div>
