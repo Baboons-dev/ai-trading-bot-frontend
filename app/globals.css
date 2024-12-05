@@ -31,17 +31,14 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
 .glow {
-  box-shadow: 0 0 20px theme('colors.primary.DEFAULT');
-}
-
-.gradient-bg {
-  background: radial-gradient(circle at top right, hsl(0 62.8% 30.6%), transparent 50%);
+  box-shadow: 0 0 20px theme("colors.primary.DEFAULT");
 }
 
 /* Custom button styles */
@@ -51,7 +48,7 @@
 }
 
 .btn-sharp::before {
-  content: '';
+  content: "";
   @apply absolute inset-0 bg-primary opacity-0 transition-opacity;
 }
 
@@ -62,5 +59,41 @@
 /* Custom card styles */
 .card-sharp {
   @apply relative overflow-hidden border border-primary/20;
-  background: linear-gradient(45deg, rgba(255,0,0,0.1) 0%, transparent 100%);
+  background: linear-gradient(45deg, rgba(255, 0, 0, 0.1) 0%, transparent 100%);
+}
+
+.t13 {
+  outline: 2.2px solid #ff375f;
+}
+
+.action-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  min-height: 45px;
+  height: 45px;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inner {
+    background: #F20823;
+    min-height: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+  }
+
+  p {
+    color: #FFF;
+    font-family: Tektur;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
 }

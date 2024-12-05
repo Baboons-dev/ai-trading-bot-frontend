@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-roboto)'],
+        roboto: ['var(--font-roboto)'],
         tektur: ['var(--font-tektur)'],
       },
       backgroundImage: {
