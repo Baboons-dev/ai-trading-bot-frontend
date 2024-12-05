@@ -43,6 +43,43 @@ const Icons = ({ name, className }: { name: string; className?: string }) => {
           </defs>
         </svg>
       );
+    case 'x_icon':
+      return (
+        <svg
+          className={className}
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clip-path="url(#clip0_24_215)">
+            <path
+              d="M11.6078 15.1383L0.8125 0.8125H4.39222L15.1875 15.1383H11.6078Z"
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M14.6795 0.8125L8.98901 6.91478"
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M1.32043 15.1382L7.00663 9.04053"
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_24_215">
+              <rect width="16" height="16" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      );
     // case 'newSvg':
     //   className={className}
     //   return svg;

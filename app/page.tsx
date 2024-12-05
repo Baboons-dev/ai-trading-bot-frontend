@@ -61,7 +61,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex justify-center items-start mt-[40px] gap-[20px]">
+        <div className="btn-wrap flex justify-center items-start mt-[40px] gap-[20px]">
           <Link className="action-btn" href="/signup">
             <button>
               <Icons name="btnL" />
