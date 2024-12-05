@@ -6,17 +6,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Bot, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useToast } from "@/components/ui/use-toast";
-import { login } from "@/api/apiCalls/user";
+import {
+  getSignatureMessage,
+  login,
+  loginWithWallet,
+} from "@/api/apiCalls/user";
 import { useAuthStore } from "@/lib/store/use-store";
 import { WalletButton } from "@/components/ui/wallet-button";
 import { Separator } from "@/components/ui/separator";
+import { useClickRef } from "@make-software/csprclick-ui";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -63,13 +68,7 @@ export default function Login() {
   const handleWalletConnect = async () => {
     try {
       setWalletLoading(true);
-      // Simulate wallet connection delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Not Implemented",
-        description: "Wallet connection will be implemented by you",
-      });
+      clickRef.signIn();
     } catch (error) {
       toast({
         variant: "destructive",
@@ -80,6 +79,40 @@ export default function Login() {
       setWalletLoading(false);
     }
   };
+
+  const clickRef = useClickRef();
+
+  useEffect(() => {
+    clickRef?.on("csprclick:signed_in", async (evt) => {
+      const loginMessage = await getSignatureMessage(evt.account.public_key);
+      const signed = await clickRef.signMessage(
+        loginMessage.message,
+        evt.account.public_key
+      );
+
+      const response = await loginWithWallet({
+        publicKey: evt.account.public_key,
+        message: loginMessage.message,
+        signedMessage: signed?.signatureHex || "",
+      });
+
+      localStorage.setItem("token", response.data.access_token);
+      localStorage.setItem("refresh_token", response.data.refresh_token);
+      document.cookie = `token=${response.data.access_token}; path=/`;
+      setToken(response.data.access_token);
+
+      router.push("/dashboard");
+    });
+    clickRef?.on("csprclick:switched_account", async (evt) => {
+      console.log(evt.account);
+    });
+    clickRef?.on("csprclick:signed_out", async () => {
+      console.log(null);
+    });
+    clickRef?.on("csprclick:disconnected", async () => {
+      console.log(null);
+    });
+  }, [clickRef?.on]);
 
   return (
     <main className="container mx-auto px-4 min-h-screen flex items-center justify-center">

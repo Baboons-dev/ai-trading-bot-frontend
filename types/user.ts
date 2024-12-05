@@ -17,6 +17,12 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface LoginWithWalletCredentials {
+  publicKey: string;
+  message: string;
+  signedMessage: string;
+}
+
 export interface SignupCredentials {
   email: string;
   full_name: string;
@@ -57,5 +63,3 @@ export interface TwitterStats {
   created_at: string;
   bot: number;
 }
-
-
