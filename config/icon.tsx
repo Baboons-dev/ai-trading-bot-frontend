@@ -80,6 +80,30 @@ const Icons = ({ name, className }: { name: string; className?: string }) => {
           </defs>
         </svg>
       );
+    case 'arrow-left':
+      return (
+        <svg
+          className={className}
+          width="18"
+          height="19"
+          viewBox="0 0 18 19"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M17.0859 9.5H0.914062"
+            stroke="white"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8.46094 1.95312L0.914062 9.5L8.46094 17.0469"
+            stroke="white"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      );
     // case 'newSvg':
     //   className={className}
     //   return svg;

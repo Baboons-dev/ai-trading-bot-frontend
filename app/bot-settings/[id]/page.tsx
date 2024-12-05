@@ -1,25 +1,25 @@
-"use client";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useRouter, useParams } from "next/navigation";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import Image from "next/image";
-import Link from "next/link";
-import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
-import { TwitterBot } from "@/types/bot";
-import { getBots, updateBot } from "@/api/apiCalls/bot";
+'use client';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useRouter, useParams } from 'next/navigation';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Textarea } from '@/components/ui/textarea';
+import { useEffect, useState } from 'react';
+import { TwitterBot } from '@/types/bot';
+import { getBots, updateBot } from '@/api/apiCalls/bot';
+import Icons from '@/config/icon';
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  description: z.string().min(10, "Description must be at least 10 characters"),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  description: z.string().min(10, 'Description must be at least 10 characters'),
 });
 
 export default function BotSettingsPage() {
@@ -32,8 +32,8 @@ export default function BotSettingsPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: '',
+      description: '',
     },
   });
 
@@ -51,9 +51,9 @@ export default function BotSettingsPage() {
         }
       } catch (error) {
         toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch bot details",
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to fetch bot details',
         });
       } finally {
         setLoading(false);
@@ -73,17 +73,17 @@ export default function BotSettingsPage() {
       });
 
       toast({
-        title: "Success",
-        description: "Bot settings updated successfully",
+        title: 'Success',
+        description: 'Bot settings updated successfully',
       });
 
-      router.push("/dashboard");
+      router.push('/dashboard');
     } catch (error: any) {
       toast({
-        variant: "destructive",
-        title: "Error",
+        variant: 'destructive',
+        title: 'Error',
         description:
-          error.response?.data?.message || "Failed to update bot settings",
+          error.response?.data?.message || 'Failed to update bot settings',
       });
     }
   };
@@ -111,20 +111,32 @@ export default function BotSettingsPage() {
   }
 
   return (
-    <main className="container mx-auto px-4 min-h-screen py-24">
-      <Card className="max-w-2xl mx-auto p-6 bg-secondary/50 backdrop-blur border-primary/20">
-        <div className="flex items-center gap-2 mb-6">
-          <Image src="/logo.svg" alt="logo" width={28} height={28} />
-          <h1 className="text-2xl font-bold">Bot Settings</h1>
-        </div>
+    <main className="BotSettingsPage mx-auto min-h-screen flex items-center justify-center px-[40px]">
+      <div className="inner-wrap flex justify-center items-center flex-col w-full max-w-[600px]">
+        <h1 className="font-tektur text-[36px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
+          Bot Settings
+        </h1>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="name">Bot Name</Label>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full mt-[40px] bg-[#101010] px-[30px] py-[40px]"
+          style={{
+            boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
+            border: '1px solid #222223',
+          }}
+        >
+          <div className="input-wrap space-y-[5px]">
+            <Label
+              htmlFor="name"
+              className="font-roboto text-[14px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]"
+            >
+              Bot Name
+            </Label>
             <Input
               id="name"
-              placeholder="My Trading Bot"
-              {...form.register("name")}
+              className="font-roboto"
+              placeholder="Insert a name"
+              {...form.register('name')}
             />
             {form.formState.errors.name && (
               <p className="text-sm text-red-500">
@@ -133,13 +145,13 @@ export default function BotSettingsPage() {
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="input-wrap space-y-[5px] mt-[40px]">
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
-              placeholder="Describe what your bot does..."
-              className="h-32"
-              {...form.register("description")}
+              placeholder="Description"
+              className="h-[120px] font-roboto"
+              {...form.register('description')}
             />
             {form.formState.errors.description && (
               <p className="text-sm text-red-500">
@@ -148,26 +160,39 @@ export default function BotSettingsPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-4">
-            <Link href="/dashboard">
-              <Button variant="ghost">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
+          <div className="flex items-center justify-between pt-[40px]">
+            <Link className="action-btn px-[20px]" href="/dashboard">
+              <button className="gap-[10px]">
+                <Icons name="arrow-left" />
+                <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                  Back to Dashboard
+                </p>
+              </button>
             </Link>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save Changes"
-              )}
-            </Button>
+
+            <div className="action-btn">
+              <button type="submit" disabled={form.formState.isSubmitting}>
+                <Icons name="btnL" />
+                <div className="inner px-[20px] min-w-[140px]">
+                  {form.formState.isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                        Saving...
+                      </p>
+                    </>
+                  ) : (
+                    <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                      Submit
+                    </p>
+                  )}
+                </div>
+                <Icons name="btnR" />
+              </button>
+            </div>
           </div>
         </form>
-      </Card>
+      </div>
     </main>
   );
 }
