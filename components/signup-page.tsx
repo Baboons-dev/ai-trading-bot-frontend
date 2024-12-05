@@ -1,33 +1,34 @@
 'use client';
 
-import {
-  getSignatureMessage,
-  login,
-  loginWithWallet,
-} from '@/api/apiCalls/user';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
-import { WalletButton } from '@/components/ui/wallet-button';
-import { useAuthStore } from '@/lib/store/use-store';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useClickRef } from '@make-software/csprclick-ui';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import Image from 'next/image';
+import { ArrowLeft, Bot, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useToast } from '@/components/ui/use-toast';
+import {
+  getSignatureMessage,
+  loginWithWallet,
+  signup,
+} from '@/api/apiCalls/user';
+import { useAuthStore } from '@/lib/store/use-store';
+import { WalletButton } from '@/components/ui/wallet-button';
+import { useClickRef } from '@make-software/csprclick-ui';
 
 const formSchema = z.object({
+  name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-export default function Login() {
+export default function SignUp() {
   const { toast } = useToast();
   const { setToken } = useAuthStore();
   const [loading, setLoading] = useState(false);
@@ -37,6 +38,7 @@ export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
     },
@@ -45,35 +47,46 @@ export default function Login() {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      const response = await login(values);
+      const response = await signup({
+        email: values.email,
+        full_name: values.name,
+        password: values.password,
+      });
 
       localStorage.setItem('token', response.data.access_token);
       localStorage.setItem('refresh_token', response.data.refresh_token);
       document.cookie = `token=${response.data.access_token}; path=/`;
       setToken(response.data.access_token);
 
-      router.push('/dashboard');
+      router.push('/setup');
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Error',
-        description: error.response?.data?.message || 'Invalid credentials',
+        description:
+          error.response?.data?.message || 'Failed to create account',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleWalletConnect = async () => {
     try {
       setWalletLoading(true);
-      clickRef.signIn();
+      // Simulate wallet connection delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      toast({
+        title: 'Not Implemented',
+        description: 'Wallet connection will be implemented by you',
+      });
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Error',
         description: 'Failed to connect wallet',
       });
-    } finally {
-      setWalletLoading(false);
     }
   };
 
@@ -102,12 +115,13 @@ export default function Login() {
 
         router.push('/dashboard');
       } catch (e) {
+        console.log(e);
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
         document.cookie = ``;
         setToken('');
-        clickRef.signOut();
         router.push('/login');
+        clickRef.signOut();
       } finally {
         setWalletLoading(false);
       }
@@ -119,10 +133,24 @@ export default function Login() {
       <Card className="w-full max-w-md p-6 bg-secondary/50 backdrop-blur border-primary/20">
         <div className="flex items-center gap-2 mb-6">
           <Image src={'/logo.svg'} alt={'logo'} width={28} height={28} />
-          <h1 className="text-2xl font-bold">Welcome Back</h1>
+          <h1 className="text-2xl font-bold">Create Account</h1>
         </div>
 
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              placeholder="John Doe"
+              {...form.register('name')}
+            />
+            {form.formState.errors.name && (
+              <p className="text-sm text-red-500">
+                {form.formState.errors.name.message}
+              </p>
+            )}
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -156,10 +184,10 @@ export default function Login() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Logging in...
+                Creating...
               </>
             ) : (
-              'Login'
+              'Continue'
             )}
           </Button>
 
@@ -187,9 +215,9 @@ export default function Login() {
 
           <div className="text-center pt-4">
             <p className="text-sm text-muted-foreground">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-primary hover:underline">
-                Sign up
+              Already have an account?{' '}
+              <Link href="/login" className="text-primary hover:underline">
+                Login
               </Link>
             </p>
           </div>
