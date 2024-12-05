@@ -1,20 +1,23 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { Bot, LogOut, Settings, User } from "lucide-react";
-import { useAuthStore } from "@/lib/store/use-store";
-import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Bot, LogOut, Settings, User } from 'lucide-react';
+import { useAuthStore } from '@/lib/store/use-store';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useClickRef } from '@make-software/csprclick-ui';
 
 export function DashboardHeader() {
   const router = useRouter();
+  const clickRef = useClickRef();
+
   const { logout } = useAuthStore();
 
   const handleLogout = async () => {
@@ -23,18 +26,19 @@ export function DashboardHeader() {
       logout();
 
       // Clear the token cookie
-      document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+      document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
 
       // Force a complete page reload and navigation
-      window.location.href = "/";
+      window.location.href = '/';
 
       // Clear any cached data
       localStorage.clear();
       sessionStorage.clear();
+      clickRef.signOut();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
       // Fallback: force navigation even if there's an error
-      window.location.href = "/";
+      window.location.href = '/';
     }
   };
 
