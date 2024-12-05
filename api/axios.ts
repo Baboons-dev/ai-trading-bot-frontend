@@ -1,18 +1,21 @@
 import axios, { AxiosInstance } from 'axios';
 import { useAuthStore } from '@/lib/store/use-store';
 
-const TIMEOUT = 15 * 1000;
-const SERVER_URL = process.env.NEXT_PUBLIC_API_HOST || 'https://api.cspr.baboons.tech/';
+const TIMEOUT = 15 * 100000;
+const SERVER_URL =
+  process.env.NEXT_PUBLIC_API_HOST || 'https://api.cspr.baboons.tech/';
 //const SERVER_URL = process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:8000/';
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY || '9KVvI9QM_98vtE__EYrhCgxFad-6do8fRB9050923uc';
+const API_KEY =
+  process.env.NEXT_PUBLIC_API_KEY ||
+  '9KVvI9QM_98vtE__EYrhCgxFad-6do8fRB9050923uc';
 
 const instance: AxiosInstance = axios.create({
   baseURL: SERVER_URL,
   timeout: TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
-    'X-API-Key': API_KEY
-  }
+    'X-API-Key': API_KEY,
+  },
 });
 
 instance.interceptors.request.use(
@@ -25,7 +28,7 @@ instance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 instance.interceptors.response.use(
@@ -40,7 +43,7 @@ instance.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default instance;
