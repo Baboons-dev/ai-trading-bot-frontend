@@ -87,15 +87,12 @@ export default function ClientProvider({
     );
   };
 
-  const topBarSettings: TopBarSettings = {
-    accountMenuItems,
-  };
   return (
     <ClickProvider options={clickOptions}>
       <ThemeProvider theme={AppTheme[themeMode]}>
         <TopBarSection>
           <TopBarContainer>
-            <ClickUI themeMode={themeMode} topBarSettings={topBarSettings} />
+            <ClickUI themeMode={themeMode} />
           </TopBarContainer>
         </TopBarSection>
         <QueryClientProvider client={queryClient}>
