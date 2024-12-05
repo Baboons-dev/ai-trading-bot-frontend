@@ -21,6 +21,7 @@ import {
 import { useAuthStore } from '@/lib/store/use-store';
 import { WalletButton } from '@/components/ui/wallet-button';
 import { useClickRef } from '@make-software/csprclick-ui';
+import useWalletLogin from '@/hooks/useWalletLogin';
 
 const formSchema = z.object({
   name: z.string().min(2),
@@ -90,43 +91,7 @@ export default function SignUp() {
     }
   };
 
-  const clickRef = useClickRef();
-
-  useEffect(() => {
-    clickRef?.on('csprclick:signed_in', async (evt) => {
-      try {
-        setWalletLoading(true);
-        const loginMessage = await getSignatureMessage(evt.account.public_key);
-        const signed = await clickRef.signMessage(
-          loginMessage.message,
-          evt.account.public_key,
-        );
-
-        const response = await loginWithWallet({
-          publicKey: evt.account.public_key,
-          message: loginMessage.message,
-          signedMessage: signed?.signatureHex || '',
-        });
-
-        localStorage.setItem('token', response.data.access_token);
-        localStorage.setItem('refresh_token', response.data.refresh_token);
-        document.cookie = `token=${response.data.access_token}; path=/`;
-        setToken(response.data.access_token);
-
-        router.push('/dashboard');
-      } catch (e) {
-        console.log(e);
-        localStorage.removeItem('token');
-        localStorage.removeItem('refresh_token');
-        document.cookie = ``;
-        setToken('');
-        router.push('/login');
-        clickRef.signOut();
-      } finally {
-        setWalletLoading(false);
-      }
-    });
-  }, [clickRef?.on]);
+  const { canUseCspr } = useWalletLogin();
 
   return (
     <main className="container mx-auto px-4 min-h-screen flex items-center justify-center">
@@ -202,8 +167,11 @@ export default function SignUp() {
             </div>
           </div>
 
-          <WalletButton onClick={handleWalletConnect} loading={walletLoading} />
-
+          <WalletButton
+            onClick={handleWalletConnect}
+            loading={walletLoading}
+            disabled={!canUseCspr}
+          />
           <div className="flex items-center justify-between pt-4">
             <Link href="/public">
               <Button variant="ghost">

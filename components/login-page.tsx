@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import useWalletLogin from '@/hooks/useWalletLogin';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -66,6 +67,7 @@ export default function Login() {
     try {
       setWalletLoading(true);
       clickRef.signIn();
+      localStorage.setItem('messagedSigned', 'false');
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -79,40 +81,7 @@ export default function Login() {
 
   const clickRef = useClickRef();
 
-  useEffect(() => {
-    clickRef?.on('csprclick:signed_in', async (evt) => {
-      try {
-        setWalletLoading(true);
-        const loginMessage = await getSignatureMessage(evt.account.public_key);
-        const signed = await clickRef.signMessage(
-          loginMessage.message,
-          evt.account.public_key,
-        );
-
-        const response = await loginWithWallet({
-          publicKey: evt.account.public_key,
-          message: loginMessage.message,
-          signedMessage: signed?.signatureHex || '',
-        });
-
-        localStorage.setItem('token', response.data.access_token);
-        localStorage.setItem('refresh_token', response.data.refresh_token);
-        document.cookie = `token=${response.data.access_token}; path=/`;
-        setToken(response.data.access_token);
-
-        router.push('/dashboard');
-      } catch (e) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refresh_token');
-        document.cookie = ``;
-        setToken('');
-        clickRef.signOut();
-        router.push('/login');
-      } finally {
-        setWalletLoading(false);
-      }
-    });
-  }, [clickRef?.on]);
+  useWalletLogin();
 
   return (
     <main className="container mx-auto px-4 min-h-screen flex items-center justify-center">
