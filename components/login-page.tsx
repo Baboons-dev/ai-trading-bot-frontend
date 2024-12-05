@@ -83,24 +83,31 @@ export default function Login() {
 
   useEffect(() => {
     clickRef?.on('csprclick:signed_in', async (evt) => {
-      const loginMessage = await getSignatureMessage(evt.account.public_key);
-      const signed = await clickRef.signMessage(
-        loginMessage.message,
-        evt.account.public_key,
-      );
+      try {
+        const loginMessage = await getSignatureMessage(evt.account.public_key);
+        const signed = await clickRef.signMessage(
+          loginMessage.message,
+          evt.account.public_key,
+        );
 
-      const response = await loginWithWallet({
-        publicKey: evt.account.public_key,
-        message: loginMessage.message,
-        signedMessage: signed?.signatureHex || '',
-      });
+        const response = await loginWithWallet({
+          publicKey: evt.account.public_key,
+          message: loginMessage.message,
+          signedMessage: signed?.signatureHex || '',
+        });
 
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('refresh_token', response.data.refresh_token);
-      document.cookie = `token=${response.data.access_token}; path=/`;
-      setToken(response.data.access_token);
+        localStorage.setItem('token', response.data.access_token);
+        localStorage.setItem('refresh_token', response.data.refresh_token);
+        document.cookie = `token=${response.data.access_token}; path=/`;
+        setToken(response.data.access_token);
 
-      router.push('/dashboard');
+        router.push('/dashboard');
+      } catch (e) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+        document.cookie = ``;
+        setToken('');
+      }
     });
   }, [clickRef?.on]);
 
