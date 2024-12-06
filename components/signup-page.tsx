@@ -72,22 +72,21 @@ export default function SignUp() {
     }
   };
 
+  const clickRef = useClickRef();
+
   const handleWalletConnect = async () => {
     try {
       setWalletLoading(true);
-      // Simulate wallet connection delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      toast({
-        title: 'Not Implemented',
-        description: 'Wallet connection will be implemented by you',
-      });
+      clickRef.signIn();
+      localStorage.setItem('messagedSigned', 'false');
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Error',
         description: 'Failed to connect wallet',
       });
+    } finally {
+      setWalletLoading(false);
     }
   };
 
