@@ -213,7 +213,7 @@ export default function SignUp() {
             </div>
 
             <div className="flex items-center justify-between pt-[40px] gap-[20px]">
-              <Link className="action-btn px-[20px]" href="/public">
+              <Link className="action-btn px-[20px]" href="/">
                 <button className="gap-[10px]">
                   <Icons name="arrow-left" />
                   <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
