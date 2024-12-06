@@ -111,9 +111,9 @@ export default function BotSettingsPage() {
   }
 
   return (
-    <main className="BotSettingsPage mx-auto min-h-screen flex items-center justify-center px-[40px]">
+    <main className="BotSettingsPage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
       <div className="inner-wrap flex justify-center items-center flex-col w-full max-w-[600px]">
-        <h1 className="font-tektur text-[36px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
+        <h1 className="font-tektur md:text-[36px] text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal] text-center">
           Bot Settings
         </h1>
 
@@ -145,7 +145,7 @@ export default function BotSettingsPage() {
             )}
           </div>
 
-          <div className="input-wrap space-y-[5px] mt-[40px]">
+          <div className="input-wrap space-y-[5px] mt-[20px]">
             <Label
               htmlFor="description"
               className="font-roboto text-[14px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]"
@@ -165,7 +165,7 @@ export default function BotSettingsPage() {
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-[40px]">
+          <div className="flex justify-between pt-[40px] sm:flex-row flex-col-reverse gap-[20px]">
             <Link className="action-btn px-[20px]" href="/dashboard">
               <button className="gap-[10px]">
                 <Icons name="arrow-left" />
