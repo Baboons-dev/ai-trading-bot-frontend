@@ -15,7 +15,7 @@ export default function Home() {
   const { XS, SM, MD, LG, XL, XXL } = useUtilBreakpoint();
 
   return (
-    <main className="Homepage mx-auto min-h-screen flex items-center justify-center md:px-[40px] px-[20px] md:my-[0] my-[80px]">
+    <main className="Homepage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
       <div className="max-w-3xl mx-auto text-center">
         <div className="flex items-center justify-center">
           <Image src={logo_img} alt={'logo'} width={231} height={9999} />
