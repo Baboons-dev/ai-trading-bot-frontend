@@ -62,7 +62,8 @@
   background: linear-gradient(45deg, rgba(255, 0, 0, 0.1) 0%, transparent 100%);
 }
 
-.BotSettingsPage {
+.BotSettingsPage,
+.LoginPage {
   .input-wrap {
     input {
       padding: 0 30px;
