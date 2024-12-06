@@ -63,7 +63,8 @@
 }
 
 .BotSettingsPage,
-.LoginPage {
+.LoginPage,
+.SignUpPage {
   .input-wrap {
     input {
       padding: 0 30px;

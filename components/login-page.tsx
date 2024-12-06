@@ -85,7 +85,7 @@ export default function Login() {
   const { canUseCspr } = useWalletLogin();
 
   return (
-    <main className="LoginPage mx-auto min-h-screen flex items-center justify-center px-[40px]">
+    <main className="LoginPage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
       <div className="inner-wrap flex justify-center items-center flex-col w-full max-w-[600px]">
         <div
           className="card-wrap flex justify-center items-center flex-col w-full bg-[#101010] px-[30px] py-[40px]"
@@ -94,7 +94,7 @@ export default function Login() {
             border: '1px solid #222223',
           }}
         >
-          <h1 className="font-tektur text-[36px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
+          <h1 className="font-tektur md:text-[36px] text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal] text-center">
             Welcome Back
           </h1>
 
@@ -123,7 +123,7 @@ export default function Login() {
               )}
             </div>
 
-            <div className="input-wrap space-y-[5px] mt-[40px]">
+            <div className="input-wrap space-y-[5px] mt-[20px]">
               <Label
                 htmlFor="password"
                 className="font-roboto text-[14px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]"
@@ -193,7 +193,7 @@ export default function Login() {
                 </button>
               </Link>
 
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-right">
                 Don&apos;t have an account?{' '}
                 <Link href="/signup" className="text-primary hover:underline">
                   Sign up
