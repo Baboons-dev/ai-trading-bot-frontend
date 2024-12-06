@@ -1,6 +1,6 @@
 'use client';
-
 import { Button } from '@/components/ui/button';
+import useUtilBreakpoint from '@/utils/useUtilBreakpoint';
 import Icons from '@/config/icon';
 import { Card } from '@/components/ui/card';
 import {
@@ -205,6 +205,9 @@ export default function Dashboard() {
     }
   };
 
+  const { XS, SM, MD, LG, XL, XXL } = useUtilBreakpoint();
+  const [IsExpanded, setIsExpanded] = useState(false);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="DashboardPage min-h-screen md:px-[60px] px-[20px] max-w-[1920px] mx-[auto]">
@@ -213,60 +216,137 @@ export default function Dashboard() {
         <div className="Header flex items-center justify-between min-h-[70px]">
           <div className="flex items-center gap-[10px]">
             <Image src={logo_img} alt={'logo'} width={153} height={9999} />
-            <h2 className="font-roboto text-[28px] text-[#F20823] font-[300] leading-[normal] tracking-[normal]">
+            <h2 className="font-roboto text-[28px] text-[#F20823] font-[300] leading-[normal] tracking-[normal] sm:flex hidden">
               Dashboard
             </h2>
           </div>
 
-          <div className="flex items-center gap-[20px]">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div className="action-btn">
-                  <button className="px-[40px] opacity-[0.5]">
-                    <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                      Profile
-                    </p>
-                  </button>
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem
-                  onClick={() => router.push(`/bot-settings/${id}`)}
-                >
-                  <Twitter className="w-4 h-4 mr-2" />
-                  Bot Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={handleLogout}
-                  className="text-destructive focus:text-destructive"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {MD && (
+            <div className="flex items-center gap-[20px]">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="action-btn">
+                    <button className="px-[40px] opacity-[0.5]">
+                      <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                        Profile
+                      </p>
+                    </button>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/bot-settings/${id}`)}
+                  >
+                    <Twitter className="w-4 h-4 mr-2" />
+                    Bot Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleLogout}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-            <div className="action-btn">
-              <button className="px-[40px] gap-[10px] opacity-[0.5]">
-                <Icons name="x_icon" />
-                <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                  View on Twitter
-                </p>
-              </button>
-            </div>
-
-            <div className="action-btn">
-              <button onClick={handleGenerateTweet}>
-                <Icons name="btnL" />
-                <div className="inner px-[20px] min-w-[140px]">
+              <div className="action-btn">
+                <button className="px-[40px] gap-[10px] opacity-[0.5]">
+                  <Icons name="x_icon" />
                   <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                    Generate Tweet
+                    View on Twitter
                   </p>
-                </div>
-                <Icons name="btnR" />
-              </button>
+                </button>
+              </div>
+
+              <div className="action-btn">
+                <button onClick={handleGenerateTweet}>
+                  <Icons name="btnL" />
+                  <div className="inner px-[20px] min-w-[140px]">
+                    <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                      Generate Tweet
+                    </p>
+                  </div>
+                  <Icons name="btnR" />
+                </button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {!MD && (
+            <>
+              <div
+                className="mobile-wrap cursor-pointer"
+                onClick={() => setIsExpanded(!IsExpanded)}
+              >
+                <Icons name="mobile-menu" />
+              </div>
+
+              <div
+                className="menu-open absolute top-[70px] left-0 w-[100%] bg-[#0A0A0A]"
+                style={{
+                  transition: 'all 0.25s 0s ease-out',
+                  opacity: IsExpanded ? 1 : 0,
+                  transform: IsExpanded ? 'translateY(0)' : 'translateY(-13px)',
+                }}
+              >
+                <div className="flex items-center flex-col gap-[20px] py-[40px]">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <div className="action-btn">
+                        <button className="px-[40px] opacity-[0.5]">
+                          <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                            Profile
+                          </p>
+                        </button>
+                      </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem
+                        onClick={() => router.push(`/bot-settings/${id}`)}
+                      >
+                        <Twitter className="w-4 h-4 mr-2" />
+                        Bot Settings
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={handleLogout}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <ArrowLeft className="w-4 h-4 mr-2" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <div className="action-btn">
+                    <button className="px-[40px] gap-[10px] opacity-[0.5]">
+                      <Icons name="x_icon" />
+                      <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                        View on Twitter
+                      </p>
+                    </button>
+                  </div>
+
+                  <div className="action-btn">
+                    <button
+                      onClick={() => {
+                        handleGenerateTweet();
+                        setIsExpanded(!IsExpanded);
+                      }}
+                    >
+                      <Icons name="btnL" />
+                      <div className="inner px-[20px] min-w-[140px]">
+                        <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
+                          Generate Tweet
+                        </p>
+                      </div>
+                      <Icons name="btnR" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="page-inner-wrap flex flex-col mt-[40px] max-w-[1280px] mx-[auto]">
