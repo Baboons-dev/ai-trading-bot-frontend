@@ -168,6 +168,8 @@ export default function Dashboard() {
     try {
       localStorage.removeItem('token');
       localStorage.removeItem('refresh_token');
+      localStorage.removeItem('bot_id');
+      localStorage.removeItem('twitter_connect_bot_id');
       document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
       setToken(null);
 
