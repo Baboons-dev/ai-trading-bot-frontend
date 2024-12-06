@@ -8,6 +8,13 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      'sm': '600px',
+      'md': '960px',
+      'lg': '1280px',
+      'xl': '1440px',
+      '2xl': '1920px',
+    },
     extend: {
       fontFamily: {
         roboto: ['var(--font-roboto)'],
