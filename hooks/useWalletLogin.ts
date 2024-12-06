@@ -5,7 +5,7 @@ import { useAuthStore } from '@/lib/store/use-store';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
-const useWalletLogin = () => {
+const useWalletLogin = (redirectPath?: string) => {
   const clickRef = useClickRef();
   const { setToken } = useAuthStore();
   const { toast } = useToast();
@@ -39,7 +39,7 @@ const useWalletLogin = () => {
           document.cookie = `token=${response.data.access_token}; path=/`;
           setToken(response.data.access_token);
 
-          router.push('/setup');
+          router.push(redirectPath || '/dashboard');
         }
       } catch (e) {
         localStorage.removeItem('token');
@@ -52,7 +52,7 @@ const useWalletLogin = () => {
         localStorage.setItem('messagedSigned', 'true');
       }
     });
-  }, [clickRef, setToken, router, toast]);
+  }, [clickRef, setToken, router, toast, redirectPath]);
 
   return { canUseCspr };
 };

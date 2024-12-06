@@ -91,7 +91,7 @@ export default function SignUp() {
     }
   };
 
-  const { canUseCspr } = useWalletLogin();
+  const { canUseCspr } = useWalletLogin('/setup');
 
   return (
     <main className="SignUpPage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
