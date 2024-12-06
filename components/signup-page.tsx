@@ -170,7 +170,7 @@ export default function SignUp() {
           <WalletButton
             onClick={handleWalletConnect}
             loading={walletLoading}
-            disabled={!canUseCspr}
+            disabled={canUseCspr}
           />
           <div className="flex items-center justify-between pt-4">
             <Link href="/public">

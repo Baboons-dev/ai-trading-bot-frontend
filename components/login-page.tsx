@@ -82,7 +82,7 @@ export default function Login() {
 
   const clickRef = useClickRef();
 
-  useWalletLogin();
+  const { canUseCspr } = useWalletLogin();
 
   return (
     <main className="LoginPage mx-auto min-h-screen flex items-center justify-center px-[40px]">
@@ -179,6 +179,7 @@ export default function Login() {
               <WalletButton
                 onClick={handleWalletConnect}
                 loading={walletLoading}
+                disabled={canUseCspr}
               />
             </div>
 
