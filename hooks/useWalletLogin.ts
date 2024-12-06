@@ -39,7 +39,7 @@ const useWalletLogin = () => {
           document.cookie = `token=${response.data.access_token}; path=/`;
           setToken(response.data.access_token);
 
-          router.push('/dashboard');
+          router.push('/setup');
         }
       } catch (e) {
         localStorage.removeItem('token');
