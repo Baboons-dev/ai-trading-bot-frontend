@@ -207,7 +207,7 @@ export default function Dashboard() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <div className="Dashboard-page min-h-screen px-[60px] max-w-[1920px] mx-[auto]">
+      <div className="DashboardPage min-h-screen md:px-[60px] px-[20px] max-w-[1920px] mx-[auto]">
         <TwitterAuthHandler />
 
         <div className="Header flex items-center justify-between min-h-[70px]">
@@ -334,7 +334,7 @@ export default function Dashboard() {
 
           <div className="recent-tweets-wrap grid grid-cols-1 lg:grid-cols-3 gap-8 mt-[40px]">
             <div
-              className="item-wrap col-span-3 p-[40px] bg-[#000]"
+              className="item-wrap col-span-3 sm:p-[40px] p-[20px] bg-[#000]"
               style={{
                 boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
                 border: '1px solid #222223',
@@ -358,7 +358,7 @@ export default function Dashboard() {
                       {tweet.text}
                     </p>
 
-                    <div className="text-wrap flex justify-between">
+                    <div className="text-wrap flex justify-between sm:flex-row flex-col gap-[4px]">
                       <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
                         Likes: {tweet.metrics.like_count}
                       </h4>
