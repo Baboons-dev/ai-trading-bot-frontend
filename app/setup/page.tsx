@@ -5,19 +5,34 @@ import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
 import Image from 'next/image';
-import { createBot, connectTwitter } from '@/api/apiCalls/bot';
 import { Suspense } from 'react';
 import { showError } from '@/hooks/useToastMessages';
+import { useState, useEffect } from 'react';
+import { createBot, connectTwitter, getBots } from '@/api/apiCalls/bot';
+import { useRouter } from 'next/navigation';
 
 function SetupForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
   });
+
+  useEffect(() => {
+    const checkExistingBot = async () => {
+      try {
+        const bots = await getBots();
+        if (bots.length > 0) {
+          router.replace('/dashboard');
+        }
+      } catch (error) {}
+    };
+
+    checkExistingBot();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +68,11 @@ function SetupForm() {
       }
     } catch (error: any) {
       console.error('Bot creation error:', error);
-      showError('Failed to create bot');
+      showError(
+        error.response?.data?.message ||
+          error.message ||
+          'Failed to create bot',
+      );
       setLoading(false);
     }
   };
