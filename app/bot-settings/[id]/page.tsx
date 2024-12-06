@@ -146,7 +146,12 @@ export default function BotSettingsPage() {
           </div>
 
           <div className="input-wrap space-y-[5px] mt-[40px]">
-            <Label htmlFor="description">Description</Label>
+            <Label
+              htmlFor="description"
+              className="font-roboto text-[14px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]"
+            >
+              Description
+            </Label>
             <Textarea
               id="description"
               placeholder="Description"
