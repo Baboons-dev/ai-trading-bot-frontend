@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Roboto, Tektur } from 'next/font/google';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from 'sonner';
 import ContextComp from '@/context/ContextComp';
 import CasperProvider from '@/context/CasperProvider';
 
@@ -68,7 +68,7 @@ export default function RootLayout({
             <CasperProvider>{children}</CasperProvider>
           </ContextComp>
         </div>
-        <Toaster />
+        <Toaster theme={'dark'} />
       </body>
     </html>
   );

@@ -17,10 +17,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
 import { signup } from '@/api/apiCalls/user';
 import { useAuthStore } from '@/lib/store/use-store';
 import { ClientOnly } from '@/components/client-only';
+import { showError } from '@/hooks/useToastMessages';
 
 const formSchema = z
   .object({
@@ -30,13 +30,12 @@ const formSchema = z
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords don\'t match',
+    message: "Passwords don't match",
     path: ['confirmPassword'],
   });
 
 export default function SignupPage() {
   const router = useRouter();
-  const { toast } = useToast();
   const { setUser, setToken } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
@@ -70,12 +69,7 @@ export default function SignupPage() {
       // Redirect directly to dashboard
       router.push('/dashboard');
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description:
-          error.response?.data?.message || 'Failed to create account',
-      });
+      showError(error.response?.data?.message || 'Failed to create account');
     } finally {
       setLoading(false);
     }

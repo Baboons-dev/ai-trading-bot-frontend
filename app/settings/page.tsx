@@ -1,50 +1,40 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { useRouter } from "next/navigation";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/hooks/use-auth";
-import Image from "next/image";
-import Link from "next/link";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
+import Image from 'next/image';
+import Link from 'next/link';
+import { showError, showSuccess } from '@/hooks/useToastMessages';
 
 const formSchema = z.object({
-  full_name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
+  full_name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
 });
 
 export default function SettingsPage() {
   const { user } = useAuth();
-  const { toast } = useToast();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: user?.full_name || "",
-      email: user?.email || "",
+      full_name: user?.full_name || '',
+      email: user?.email || '',
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       // TODO: Implement profile update API call
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-      });
+      showSuccess('Profile updated successfully');
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.response?.data?.message || "Failed to update profile",
-      });
+      showError(error.response?.data?.message || 'Failed to update profile');
     }
   };
 
@@ -62,7 +52,7 @@ export default function SettingsPage() {
             <Input
               id="full_name"
               placeholder="John Doe"
-              {...form.register("full_name")}
+              {...form.register('full_name')}
             />
             {form.formState.errors.full_name && (
               <p className="text-sm text-red-500">
@@ -77,7 +67,7 @@ export default function SettingsPage() {
               id="email"
               type="email"
               placeholder="john@example.com"
-              {...form.register("email")}
+              {...form.register('email')}
             />
             {form.formState.errors.email && (
               <p className="text-sm text-red-500">
@@ -100,7 +90,7 @@ export default function SettingsPage() {
                   Saving...
                 </>
               ) : (
-                "Save Changes"
+                'Save Changes'
               )}
             </Button>
           </div>

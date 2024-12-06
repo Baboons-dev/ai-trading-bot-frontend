@@ -1,28 +1,21 @@
 'use client';
 
-import {
-  getSignatureMessage,
-  login,
-  loginWithWallet,
-} from '@/api/apiCalls/user';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { login } from '@/api/apiCalls/user';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
 import { WalletButton } from '@/components/ui/wallet-button';
 import { useAuthStore } from '@/lib/store/use-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useClickRef } from '@make-software/csprclick-ui';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import useWalletLogin from '@/hooks/useWalletLogin';
 import Icons from '@/config/icon';
+import { showError } from '@/hooks/useToastMessages';
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -30,7 +23,6 @@ const formSchema = z.object({
 });
 
 export default function Login() {
-  const { toast } = useToast();
   const { setToken } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(false);
@@ -56,11 +48,9 @@ export default function Login() {
 
       router.push('/dashboard');
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: error.response?.data?.message || 'Invalid credentials',
-      });
+      showError(error.response?.data?.message || 'Invalid credentials');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,11 +60,7 @@ export default function Login() {
       clickRef.signIn();
       localStorage.setItem('messagedSigned', 'false');
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to connect wallet',
-      });
+      showError('Failed to connect wallet');
     } finally {
       setWalletLoading(false);
     }

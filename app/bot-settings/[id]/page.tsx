@@ -8,14 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Textarea } from '@/components/ui/textarea';
 import { useEffect, useState } from 'react';
 import { TwitterBot } from '@/types/bot';
 import { getBots, updateBot } from '@/api/apiCalls/bot';
 import Icons from '@/config/icon';
+import { showError, showSuccess } from '@/hooks/useToastMessages';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -24,7 +23,6 @@ const formSchema = z.object({
 
 export default function BotSettingsPage() {
   const { id } = useParams();
-  const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [bot, setBot] = useState<TwitterBot | null>(null);
@@ -50,18 +48,14 @@ export default function BotSettingsPage() {
           });
         }
       } catch (error) {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'Failed to fetch bot details',
-        });
+        showError('Failed to fetch bot details');
       } finally {
         setLoading(false);
       }
     };
 
     fetchBot();
-  }, [id, form, toast]);
+  }, [id, form]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -72,19 +66,13 @@ export default function BotSettingsPage() {
         description: values.description,
       });
 
-      toast({
-        title: 'Success',
-        description: 'Bot settings updated successfully',
-      });
+      showSuccess('Bot settings updated successfully');
 
       router.push('/dashboard');
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description:
-          error.response?.data?.message || 'Failed to update bot settings',
-      });
+      showError(
+        error.response?.data?.message || 'Failed to update bot settings',
+      );
     }
   };
 

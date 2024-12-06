@@ -1,30 +1,9 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import useUtilBreakpoint from '@/utils/useUtilBreakpoint';
 import Icons from '@/config/icon';
-import { Card } from '@/components/ui/card';
-import {
-  Twitter,
-  BarChart3,
-  MessageCircle,
-  Users,
-  Repeat2,
-  ArrowLeft,
-  Settings,
-  UserCircle,
-} from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
+import { ArrowLeft, Twitter } from 'lucide-react';
 import Image from 'next/image';
 import { useAuthStore } from '@/lib/store/use-store';
-import { toast, useToast } from '@/components/ui/use-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   DropdownMenu,
@@ -42,6 +21,7 @@ import {
 } from '@/api/apiCalls/user';
 import { TwitterStats } from '@/types/user';
 import logo_img from '@/assets/images/logo.svg';
+import { showError, showSuccess } from '@/hooks/useToastMessages';
 
 function timeAgo(dateString: string) {
   const date = new Date(dateString);
@@ -61,7 +41,6 @@ function timeAgo(dateString: string) {
 }
 
 function TwitterAuthHandler() {
-  const { toast } = useToast();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -79,18 +58,11 @@ function TwitterAuthHandler() {
           });
 
           if (response.status === 'success') {
-            toast({
-              title: 'Success',
-              description: 'Twitter successfully connected!',
-            });
+            showSuccess('Twitter successfully connected!');
           }
         } catch (error: any) {
           console.error('Twitter connection error:', error);
-          toast({
-            variant: 'destructive',
-            title: 'Error',
-            description: 'Failed to connect Twitter account',
-          });
+          showError('Failed to connect Twitter account');
         } finally {
           localStorage.removeItem('twitter_connect_bot_id');
         }
@@ -98,7 +70,7 @@ function TwitterAuthHandler() {
     };
 
     handleTwitterCallback();
-  }, [searchParams, toast]);
+  }, [searchParams]);
 
   return null;
 }
@@ -120,11 +92,7 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error('Failed to fetch bots:', error);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'Failed to fetch bot information',
-        });
+        showError('Failed to fetch bot information');
       }
     };
 
@@ -148,11 +116,7 @@ export default function Dashboard() {
         setTwitterStats(stats);
       } catch (error) {
         console.error('Failed to fetch stored Twitter stats:', error);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'Failed to fetch Twitter stats',
-        });
+        showError('Failed to fetch Twitter stats');
       }
     };
 
@@ -173,16 +137,9 @@ export default function Dashboard() {
 
       router.push('/login');
 
-      toast({
-        title: 'Success',
-        description: 'Logged out successfully',
-      });
+      showSuccess('Logged out successfully');
     } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to logout',
-      });
+      showError('Failed to logout');
     }
   };
 
@@ -191,17 +148,10 @@ export default function Dashboard() {
 
     try {
       await TriggerGenerateTweet(Number(id));
-      toast({
-        title: 'Success',
-        description: 'Tweet generation started',
-      });
+      showSuccess('Tweet generation started');
     } catch (error) {
       console.error('Failed to generate tweet:', error);
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: 'Failed to generate tweet',
-      });
+      showError('Failed to generate tweet');
     }
   };
 

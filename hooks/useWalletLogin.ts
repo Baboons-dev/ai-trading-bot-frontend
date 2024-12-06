@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react';
 import { useClickRef } from '@make-software/csprclick-ui';
 import { getSignatureMessage, loginWithWallet } from '@/api/apiCalls/user';
 import { useAuthStore } from '@/lib/store/use-store';
-import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
 const useWalletLogin = (redirectPath?: string) => {
   const clickRef = useClickRef();
   const { setToken } = useAuthStore();
-  const { toast } = useToast();
   const router = useRouter();
   const [canUseCspr, setCanUseCspr] = useState(false);
 
@@ -52,7 +50,7 @@ const useWalletLogin = (redirectPath?: string) => {
         localStorage.setItem('messagedSigned', 'true');
       }
     });
-  }, [clickRef, setToken, router, toast, redirectPath]);
+  }, [clickRef, setToken, router, redirectPath]);
 
   return { canUseCspr };
 };
