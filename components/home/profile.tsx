@@ -15,7 +15,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const clickRef = useClickRef();
   const [rank, setRank] = useState<number>(0);
-  const [users, setUsers] = useState<[]>();
 
   useEffect(() => {
     if (!user) {
@@ -24,7 +23,6 @@ export default function ProfilePage() {
   }, [user, router]);
   useEffect(() => {
     GetLeaderboard().then((res) => {
-      setRank(res?.position);
       setUsers(res?.users);
     });
   }, []);
@@ -69,7 +67,7 @@ export default function ProfilePage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400">Your Rank</span>
-                  <span className="text-xl font-bold">#{rank}</span>
+                  <span className="text-xl font-bold">#{user?.position}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400">Total Points</span>
