@@ -55,7 +55,7 @@ export default function SignUp() {
       document.cookie = `token=${response.data.access_token}; path=/`;
       setToken(response.data.access_token);
 
-      router.push('/setup');
+      router.push('/refer');
     } catch (error: any) {
       showError(error.response?.data?.message || 'Failed to create account');
     } finally {
@@ -77,7 +77,7 @@ export default function SignUp() {
     }
   };
 
-  const { canUseCspr } = useWalletLogin('/setup');
+  const { canUseCspr } = useWalletLogin('/refer');
 
   return (
     <main className="SignUpPage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
