@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import ContextComp from '@/context/ContextComp';
 import CasperProvider from '@/context/CasperProvider';
 import Script from 'next/script';
+import React from 'react';
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],

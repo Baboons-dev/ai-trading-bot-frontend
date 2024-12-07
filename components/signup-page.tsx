@@ -21,6 +21,7 @@ const formSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
+  ref_code: z.string(),
 });
 
 export default function SignUp() {
@@ -35,6 +36,7 @@ export default function SignUp() {
       name: '',
       email: '',
       password: '',
+      ref_code: '',
     },
   });
 
@@ -45,6 +47,7 @@ export default function SignUp() {
         email: values.email,
         full_name: values.name,
         password: values.password,
+        ref_code: values.ref_code,
       });
 
       localStorage.setItem('token', response.data.access_token);
@@ -154,7 +157,25 @@ export default function SignUp() {
                 </p>
               )}
             </div>
-
+            <div className="input-wrap space-y-[5px] mt-[20px]">
+              <Label
+                htmlFor="name"
+                className="font-roboto text-[14px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]"
+              >
+                Referral Code (Optional)
+              </Label>
+              <Input
+                id="name"
+                placeholder="Enter refferral code"
+                className="font-roboto"
+                {...form.register('ref_code')}
+              />
+              {form.formState.errors.ref_code && (
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.ref_code.message}
+                </p>
+              )}
+            </div>
             <div className="action-btn min-w-[100%] mt-[40px]">
               <button className="w-full" type="submit" disabled={loading}>
                 <Icons name="btnL" className="shrink-0" />

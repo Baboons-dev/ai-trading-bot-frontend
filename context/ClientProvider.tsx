@@ -8,7 +8,9 @@ import { ThemeModeType, TopBarSettings } from '@make-software/csprclick-ui';
 import 'prismjs/themes/prism-okaidia.css';
 import 'prismjs/components/prism-typescript';
 import { NETWORKS } from '@/components/settings';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuthStore } from '@/lib/store/use-store';
+import { GetUser } from '@/api/apiCalls/user';
 
 const ClickProvider = dynamic(
   () => import('@make-software/csprclick-ui').then((mod) => mod.ClickProvider),
@@ -86,7 +88,24 @@ export default function ClientProvider({
         : ThemeModeType.light,
     );
   };
+  const [firstTime, setFirstTime] = useState(true);
+  const { user, token, setUser, logout } = useAuthStore();
+  useEffect(() => {
+    const initAuth = async () => {
+      console.log(token, firstTime);
+      if (token && firstTime) {
+        try {
+          const userData = await GetUser();
+          setUser(userData);
+          setFirstTime(false);
+        } catch (error) {
+          logout();
+        }
+      }
+    };
 
+    initAuth();
+  }, [token, user, setUser, logout, firstTime]);
   return (
     <ClickProvider options={clickOptions}>
       <ThemeProvider theme={AppTheme[themeMode]}>

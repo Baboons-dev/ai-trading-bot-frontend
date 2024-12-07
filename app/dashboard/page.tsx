@@ -165,257 +165,257 @@ export default function Dashboard() {
       <div className="DashboardPage min-h-screen md:px-[60px] px-[20px] max-w-[1920px] mx-[auto]">
         <TwitterAuthHandler />
 
-        <div className="Header flex items-center justify-between min-h-[70px]">
-          <div className="flex items-center gap-[10px]">
-            <Image src={logo_img} alt={'logo'} width={153} height={9999} />
-            <h2 className="font-roboto text-[28px] text-[#F20823] font-[300] leading-[normal] tracking-[normal] sm:flex hidden">
-              Dashboard
-            </h2>
-          </div>
+        {/*<div className="Header flex items-center justify-between min-h-[70px]">*/}
+        {/*  <div className="flex items-center gap-[10px]">*/}
+        {/*    <Image src={logo_img} alt={'logo'} width={153} height={9999} />*/}
+        {/*    <h2 className="font-roboto text-[28px] text-[#F20823] font-[300] leading-[normal] tracking-[normal] sm:flex hidden">*/}
+        {/*      Dashboard*/}
+        {/*    </h2>*/}
+        {/*  </div>*/}
 
-          {MD && (
-            <div className="flex items-center gap-[20px]">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="action-btn">
-                    <button className="px-[40px] opacity-[0.5]">
-                      <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                        Profile
-                      </p>
-                    </button>
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem
-                    onClick={() => router.push(`/bot-settings/${id}`)}
-                  >
-                    <Twitter className="w-4 h-4 mr-2" />
-                    Bot Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={handleLogout}
-                    className="text-destructive focus:text-destructive"
-                  >
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+        {/*  {MD && (*/}
+        {/*    <div className="flex items-center gap-[20px]">*/}
+        {/*      <DropdownMenu>*/}
+        {/*        <DropdownMenuTrigger asChild>*/}
+        {/*          <div className="action-btn">*/}
+        {/*            <button className="px-[40px] opacity-[0.5]">*/}
+        {/*              <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*                Profile*/}
+        {/*              </p>*/}
+        {/*            </button>*/}
+        {/*          </div>*/}
+        {/*        </DropdownMenuTrigger>*/}
+        {/*        <DropdownMenuContent align="end" className="w-48">*/}
+        {/*          <DropdownMenuItem*/}
+        {/*            onClick={() => router.push(`/bot-settings/${id}`)}*/}
+        {/*          >*/}
+        {/*            <Twitter className="w-4 h-4 mr-2" />*/}
+        {/*            Bot Settings*/}
+        {/*          </DropdownMenuItem>*/}
+        {/*          <DropdownMenuItem*/}
+        {/*            onClick={handleLogout}*/}
+        {/*            className="text-destructive focus:text-destructive"*/}
+        {/*          >*/}
+        {/*            <ArrowLeft className="w-4 h-4 mr-2" />*/}
+        {/*            Logout*/}
+        {/*          </DropdownMenuItem>*/}
+        {/*        </DropdownMenuContent>*/}
+        {/*      </DropdownMenu>*/}
 
-              <div className="action-btn">
-                <button className="px-[40px] gap-[10px] opacity-[0.5]">
-                  <Icons name="x_icon" />
-                  <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                    View on Twitter
-                  </p>
-                </button>
-              </div>
+        {/*      <div className="action-btn">*/}
+        {/*        <button className="px-[40px] gap-[10px] opacity-[0.5]">*/}
+        {/*          <Icons name="x_icon" />*/}
+        {/*          <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*            View on Twitter*/}
+        {/*          </p>*/}
+        {/*        </button>*/}
+        {/*      </div>*/}
 
-              <div className="action-btn">
-                <button onClick={handleGenerateTweet}>
-                  <Icons name="btnL" />
-                  <div className="inner px-[20px] min-w-[140px]">
-                    <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                      Generate Tweet
-                    </p>
-                  </div>
-                  <Icons name="btnR" />
-                </button>
-              </div>
-            </div>
-          )}
+        {/*      <div className="action-btn">*/}
+        {/*        <button onClick={handleGenerateTweet}>*/}
+        {/*          <Icons name="btnL" />*/}
+        {/*          <div className="inner px-[20px] min-w-[140px]">*/}
+        {/*            <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*              Generate Tweet*/}
+        {/*            </p>*/}
+        {/*          </div>*/}
+        {/*          <Icons name="btnR" />*/}
+        {/*        </button>*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  )}*/}
 
-          {!MD && (
-            <>
-              <div
-                className="mobile-wrap cursor-pointer"
-                onClick={() => setIsExpanded(!IsExpanded)}
-              >
-                <Icons name="mobile-menu" />
-              </div>
+        {/*  {!MD && (*/}
+        {/*    <>*/}
+        {/*      <div*/}
+        {/*        className="mobile-wrap cursor-pointer"*/}
+        {/*        onClick={() => setIsExpanded(!IsExpanded)}*/}
+        {/*      >*/}
+        {/*        <Icons name="mobile-menu" />*/}
+        {/*      </div>*/}
 
-              <div
-                className="menu-open absolute top-[70px] left-0 w-[100%] bg-[#0A0A0A]"
-                style={{
-                  transition: 'all 0.25s 0s ease-out',
-                  opacity: IsExpanded ? 1 : 0,
-                  transform: IsExpanded ? 'translateY(0)' : 'translateY(-13px)',
-                }}
-              >
-                <div className="flex items-center flex-col gap-[20px] py-[40px]">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <div className="action-btn">
-                        <button className="px-[40px] opacity-[0.5]">
-                          <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                            Profile
-                          </p>
-                        </button>
-                      </div>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem
-                        onClick={() => router.push(`/bot-settings/${id}`)}
-                      >
-                        <Twitter className="w-4 h-4 mr-2" />
-                        Bot Settings
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={handleLogout}
-                        className="text-destructive focus:text-destructive"
-                      >
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+        {/*      <div*/}
+        {/*        className="menu-open absolute top-[70px] left-0 w-[100%] bg-[#0A0A0A]"*/}
+        {/*        style={{*/}
+        {/*          transition: 'all 0.25s 0s ease-out',*/}
+        {/*          opacity: IsExpanded ? 1 : 0,*/}
+        {/*          transform: IsExpanded ? 'translateY(0)' : 'translateY(-13px)',*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <div className="flex items-center flex-col gap-[20px] py-[40px]">*/}
+        {/*          <DropdownMenu>*/}
+        {/*            <DropdownMenuTrigger asChild>*/}
+        {/*              <div className="action-btn">*/}
+        {/*                <button className="px-[40px] opacity-[0.5]">*/}
+        {/*                  <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*                    Profile*/}
+        {/*                  </p>*/}
+        {/*                </button>*/}
+        {/*              </div>*/}
+        {/*            </DropdownMenuTrigger>*/}
+        {/*            <DropdownMenuContent align="end" className="w-48">*/}
+        {/*              <DropdownMenuItem*/}
+        {/*                onClick={() => router.push(`/bot-settings/${id}`)}*/}
+        {/*              >*/}
+        {/*                <Twitter className="w-4 h-4 mr-2" />*/}
+        {/*                Bot Settings*/}
+        {/*              </DropdownMenuItem>*/}
+        {/*              <DropdownMenuItem*/}
+        {/*                onClick={handleLogout}*/}
+        {/*                className="text-destructive focus:text-destructive"*/}
+        {/*              >*/}
+        {/*                <ArrowLeft className="w-4 h-4 mr-2" />*/}
+        {/*                Logout*/}
+        {/*              </DropdownMenuItem>*/}
+        {/*            </DropdownMenuContent>*/}
+        {/*          </DropdownMenu>*/}
 
-                  <div className="action-btn">
-                    <button className="px-[40px] gap-[10px] opacity-[0.5]">
-                      <Icons name="x_icon" />
-                      <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                        View on Twitter
-                      </p>
-                    </button>
-                  </div>
+        {/*          <div className="action-btn">*/}
+        {/*            <button className="px-[40px] gap-[10px] opacity-[0.5]">*/}
+        {/*              <Icons name="x_icon" />*/}
+        {/*              <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*                View on Twitter*/}
+        {/*              </p>*/}
+        {/*            </button>*/}
+        {/*          </div>*/}
 
-                  <div className="action-btn">
-                    <button
-                      onClick={() => {
-                        handleGenerateTweet();
-                        setIsExpanded(!IsExpanded);
-                      }}
-                    >
-                      <Icons name="btnL" />
-                      <div className="inner px-[20px] min-w-[140px]">
-                        <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                          Generate Tweet
-                        </p>
-                      </div>
-                      <Icons name="btnR" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+        {/*          <div className="action-btn">*/}
+        {/*            <button*/}
+        {/*              onClick={() => {*/}
+        {/*                handleGenerateTweet();*/}
+        {/*                setIsExpanded(!IsExpanded);*/}
+        {/*              }}*/}
+        {/*            >*/}
+        {/*              <Icons name="btnL" />*/}
+        {/*              <div className="inner px-[20px] min-w-[140px]">*/}
+        {/*                <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*                  Generate Tweet*/}
+        {/*                </p>*/}
+        {/*              </div>*/}
+        {/*              <Icons name="btnR" />*/}
+        {/*            </button>*/}
+        {/*          </div>*/}
+        {/*        </div>*/}
+        {/*      </div>*/}
+        {/*    </>*/}
+        {/*  )}*/}
+        {/*</div>*/}
 
-        <div className="page-inner-wrap flex flex-col mt-[40px] max-w-[1280px] mx-[auto]">
-          <div className="user-stat-wrap grid grid-cols-1 md:grid-cols-4 gap-[20px]">
-            <div
-              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
-              style={{
-                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                border: '1px solid #222223',
-              }}
-            >
-              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
-                Total Tweets
-              </h3>
-              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
-                {twitterStats?.total_tweets || 0}
-              </p>
-            </div>
+        {/*<div className="page-inner-wrap flex flex-col mt-[40px] max-w-[1280px] mx-[auto]">*/}
+        {/*  <div className="user-stat-wrap grid grid-cols-1 md:grid-cols-4 gap-[20px]">*/}
+        {/*    <div*/}
+        {/*      className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"*/}
+        {/*      style={{*/}
+        {/*        boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*        border: '1px solid #222223',*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*        Total Tweets*/}
+        {/*      </h3>*/}
+        {/*      <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">*/}
+        {/*        {twitterStats?.total_tweets || 0}*/}
+        {/*      </p>*/}
+        {/*    </div>*/}
 
-            <div
-              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
-              style={{
-                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                border: '1px solid #222223',
-              }}
-            >
-              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
-                Followers
-              </h3>
-              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
-                {twitterStats?.total_followers || 0}
-              </p>
-            </div>
+        {/*    <div*/}
+        {/*      className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"*/}
+        {/*      style={{*/}
+        {/*        boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*        border: '1px solid #222223',*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*        Followers*/}
+        {/*      </h3>*/}
+        {/*      <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">*/}
+        {/*        {twitterStats?.total_followers || 0}*/}
+        {/*      </p>*/}
+        {/*    </div>*/}
 
-            <div
-              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
-              style={{
-                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                border: '1px solid #222223',
-              }}
-            >
-              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
-                Retweets
-              </h3>
-              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
-                {twitterStats?.total_retweets || 0}
-              </p>
-            </div>
+        {/*    <div*/}
+        {/*      className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"*/}
+        {/*      style={{*/}
+        {/*        boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*        border: '1px solid #222223',*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*        Retweets*/}
+        {/*      </h3>*/}
+        {/*      <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">*/}
+        {/*        {twitterStats?.total_retweets || 0}*/}
+        {/*      </p>*/}
+        {/*    </div>*/}
 
-            <div
-              className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"
-              style={{
-                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                border: '1px solid #222223',
-              }}
-            >
-              <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
-                Engagement Rate
-              </h3>
-              <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">
-                {twitterStats?.engagement_rate || 0}%
-              </p>
-            </div>
-          </div>
+        {/*    <div*/}
+        {/*      className="user-stat-item flex flex-col gap-[10px] px-[20px] py-[15px] bg-[#000]"*/}
+        {/*      style={{*/}
+        {/*        boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*        border: '1px solid #222223',*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      <h3 className="font-roboto text-[12px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*        Engagement Rate*/}
+        {/*      </h3>*/}
+        {/*      <p className="font-tektur text-[24px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal]">*/}
+        {/*        {twitterStats?.engagement_rate || 0}%*/}
+        {/*      </p>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
 
-          <div className="recent-tweets-wrap grid grid-cols-1 lg:grid-cols-3 gap-8 mt-[40px]">
-            <div
-              className="item-wrap col-span-3 sm:p-[40px] p-[20px] bg-[#000]"
-              style={{
-                boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                border: '1px solid #222223',
-              }}
-            >
-              <h2 className="font-tektur text-[24px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
-                Recent Tweets
-              </h2>
+        {/*  <div className="recent-tweets-wrap grid grid-cols-1 lg:grid-cols-3 gap-8 mt-[40px]">*/}
+        {/*    <div*/}
+        {/*      className="item-wrap col-span-3 sm:p-[40px] p-[20px] bg-[#000]"*/}
+        {/*      style={{*/}
+        {/*        boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*        border: '1px solid #222223',*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      <h2 className="font-tektur text-[24px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">*/}
+        {/*        Recent Tweets*/}
+        {/*      </h2>*/}
 
-              <div className="tweet-container flex flex-col mt-[40px] gap-[10px]">
-                {twitterStats?.recent_tweets?.map((tweet, index) => (
-                  <div
-                    key={index}
-                    className="card-item flex flex-col gap-[15px] py-[15px] px-[20px] bg-[#000]"
-                    style={{
-                      boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                      border: '1px solid #222223',
-                    }}
-                  >
-                    <p className="font-roboto text-[16px] text-[#ffffff] font-[300] leading-[normal] tracking-[normal]">
-                      {tweet.text}
-                    </p>
+        {/*      <div className="tweet-container flex flex-col mt-[40px] gap-[10px]">*/}
+        {/*        {twitterStats?.recent_tweets?.map((tweet, index) => (*/}
+        {/*          <div*/}
+        {/*            key={index}*/}
+        {/*            className="card-item flex flex-col gap-[15px] py-[15px] px-[20px] bg-[#000]"*/}
+        {/*            style={{*/}
+        {/*              boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*              border: '1px solid #222223',*/}
+        {/*            }}*/}
+        {/*          >*/}
+        {/*            <p className="font-roboto text-[16px] text-[#ffffff] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*              {tweet.text}*/}
+        {/*            </p>*/}
 
-                    <div className="text-wrap flex justify-between sm:flex-row flex-col gap-[4px]">
-                      <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
-                        Likes: {tweet.metrics.like_count}
-                      </h4>
-                      <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">
-                        {timeAgo(tweet.created_at)}
-                      </h4>
-                    </div>
-                  </div>
-                )) || (
-                  <div
-                    className="card-item py-[15px] px-[20px] bg-[#000]"
-                    style={{
-                      boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',
-                      border: '1px solid #222223',
-                    }}
-                  >
-                    <p className="font-roboto text-[16px] text-[#ffffff] font-[300] leading-[normal] tracking-[normal]">
-                      No tweets available
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        {/*            <div className="text-wrap flex justify-between sm:flex-row flex-col gap-[4px]">*/}
+        {/*              <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*                Likes: {tweet.metrics.like_count}*/}
+        {/*              </h4>*/}
+        {/*              <h4 className="font-roboto text-[16px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*                {timeAgo(tweet.created_at)}*/}
+        {/*              </h4>*/}
+        {/*            </div>*/}
+        {/*          </div>*/}
+        {/*        )) || (*/}
+        {/*          <div*/}
+        {/*            className="card-item py-[15px] px-[20px] bg-[#000]"*/}
+        {/*            style={{*/}
+        {/*              boxShadow: '0px 0px 30px 0px rgba(0, 0, 0, 0.75)',*/}
+        {/*              border: '1px solid #222223',*/}
+        {/*            }}*/}
+        {/*          >*/}
+        {/*            <p className="font-roboto text-[16px] text-[#ffffff] font-[300] leading-[normal] tracking-[normal]">*/}
+        {/*              No tweets available*/}
+        {/*            </p>*/}
+        {/*          </div>*/}
+        {/*        )}*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     </Suspense>
   );

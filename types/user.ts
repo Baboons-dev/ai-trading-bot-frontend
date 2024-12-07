@@ -1,10 +1,15 @@
-import { BaseModel } from "./base";
+import { BaseModel } from './base';
 
 export interface User extends BaseModel {
   id: number;
   email: string;
   full_name?: string;
   username?: string;
+  telegram_id?: string;
+  point?: number;
+  refer_count?: number;
+  refer_bonus?: number;
+  refer_by?: number;
   is_active?: boolean;
   is_staff?: boolean;
   is_superuser?: boolean;
@@ -27,10 +32,11 @@ export interface SignupCredentials {
   email: string;
   full_name: string;
   password: string;
+  ref_code?: string;
 }
 
 export interface AuthResponse {
-  status: "success" | "error";
+  status: 'success' | 'error';
   data: {
     user_id: number;
     email: string;
