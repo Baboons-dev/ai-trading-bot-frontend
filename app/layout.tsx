@@ -4,6 +4,7 @@ import { Roboto, Tektur } from 'next/font/google';
 import { Toaster } from 'sonner';
 import ContextComp from '@/context/ContextComp';
 import CasperProvider from '@/context/CasperProvider';
+import Script from 'next/script';
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -60,6 +61,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <Script
+          src="https://telegram.org/js/telegram-web-app.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${roboto.variable} ${tektur.variable} font-roboto bg-[#0A0A0A]`}
       >
