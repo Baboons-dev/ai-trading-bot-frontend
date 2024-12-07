@@ -6,11 +6,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { showError } from '@/hooks/useToastMessages';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { createBot, connectTwitter, getBots } from '@/api/apiCalls/bot';
 import { useRouter } from 'next/navigation';
+// import { router } from 'next/client';
 
 function SetupForm() {
   const router = useRouter();
@@ -139,6 +140,10 @@ function SetupForm() {
 }
 
 export default function Setup() {
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/refer');
+  }, []);
   return (
     <Suspense
       fallback={
@@ -151,7 +156,7 @@ export default function Setup() {
         </main>
       }
     >
-      <SetupForm />
+      {/*<SetupForm />*/}
     </Suspense>
   );
 }

@@ -2,10 +2,10 @@
 
 import { HeroSection } from '@/components/home/hero-section';
 import { LeaderboardSection } from '@/components/home/leaderboard-section';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import Icons from '@/config/icon';
-import useUtilBreakpoint from '@/utils/useUtilBreakpoint';
+// import { Button } from '@/components/ui/button';
+// import { Card } from '@/components/ui/card';
+// import Icons from '@/config/icon';
+// import useUtilBreakpoint from '@/utils/useUtilBreakpoint';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo_img from '@/assets/images/logo.svg';
@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { GetLeaderboard } from '@/api/apiCalls/user';
 
 export default function Home() {
-  const { XS, SM, MD, LG, XL, XXL } = useUtilBreakpoint();
+  // const { XS, SM, MD, LG, XL, XXL } = useUtilBreakpoint();
   const [users, setUsers] = useState<[]>();
   useEffect(() => {
     GetLeaderboard().then((res) => {

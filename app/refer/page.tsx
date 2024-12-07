@@ -72,12 +72,12 @@ export default function ReferPage() {
           </div>
 
           <div className="flex items-center justify-between pt-4">
-            {/*<Link href="/dashboard">*/}
-            {/*  <Button variant="ghost">*/}
-            {/*    <ArrowLeft className="w-4 h-4 mr-2" />*/}
-            {/*    Back to Dashboard*/}
-            {/*  </Button>*/}
-            {/*</Link>*/}
+            <Link href="/profile">
+              <Button variant="ghost">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Profile
+              </Button>
+            </Link>
             <Button type="submit" disabled={form.formState.isSubmitting}>
               {form.formState.isSubmitting ? (
                 <>
