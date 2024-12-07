@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useClickRef } from '@make-software/csprclick-ui';
 import { getSignatureMessage, loginWithWallet } from '@/api/apiCalls/user';
@@ -26,12 +28,16 @@ const useWalletLogin = (redirectPath?: string) => {
             evt.account.public_key,
           );
 
+          const referralCode = localStorage.getItem('referral_code');
+
           const response = await loginWithWallet({
             publicKey: evt.account.public_key,
             message: loginMessage.message,
             signedMessage: signed?.signatureHex || '',
+            referral_code: referralCode || undefined,
           });
 
+          localStorage.removeItem('referral_code');
           localStorage.setItem('token', response.data.access_token);
           localStorage.setItem('refresh_token', response.data.refresh_token);
           document.cookie = `token=${response.data.access_token}; path=/`;
@@ -42,6 +48,7 @@ const useWalletLogin = (redirectPath?: string) => {
       } catch (e) {
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('referral_code');
         document.cookie = ``;
         setToken('');
         clickRef.signOut();

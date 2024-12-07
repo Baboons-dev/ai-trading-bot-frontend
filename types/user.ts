@@ -10,6 +10,7 @@ export interface User extends BaseModel {
   is_superuser?: boolean;
   last_login?: string;
   date_joined?: string;
+  referral_code?: string;
 }
 
 export interface LoginCredentials {
@@ -21,12 +22,14 @@ export interface LoginWithWalletCredentials {
   publicKey: string;
   message: string;
   signedMessage: string;
+  referral_code?: string;
 }
 
 export interface SignupCredentials {
   email: string;
   full_name: string;
   password: string;
+  referral_code?: string;
 }
 
 export interface AuthResponse {

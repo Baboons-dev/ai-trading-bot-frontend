@@ -16,18 +16,22 @@ import { useClickRef } from '@make-software/csprclick-ui';
 import useWalletLogin from '@/hooks/useWalletLogin';
 import Icons from '@/config/icon';
 import { showError } from '@/hooks/useToastMessages';
+import { ReferralModal } from '@/components/ui/referral-modal';
 
 const formSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
+  referral_code: z.string().optional(),
 });
 
 export default function SignUp() {
   const { setToken } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [walletLoading, setWalletLoading] = useState(false);
+  const [showReferralModal, setShowReferralModal] = useState(false);
   const router = useRouter();
+  const clickRef = useClickRef();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,6 +39,7 @@ export default function SignUp() {
       name: '',
       email: '',
       password: '',
+      referral_code: '',
     },
   });
 
@@ -45,6 +50,7 @@ export default function SignUp() {
         email: values.email,
         full_name: values.name,
         password: values.password,
+        referral_code: values.referral_code,
       });
 
       localStorage.setItem('token', response.data.access_token);
@@ -60,13 +66,17 @@ export default function SignUp() {
     }
   };
 
-  const clickRef = useClickRef();
+  const handleWalletConnect = () => {
+    setShowReferralModal(true);
+  };
 
-  const handleWalletConnect = async () => {
+  const handleReferralSubmit = async (referralCode: string) => {
     try {
       setWalletLoading(true);
+      localStorage.setItem('referral_code', referralCode);
       clickRef.signIn();
       localStorage.setItem('messagedSigned', 'false');
+      setShowReferralModal(false);
     } catch (error) {
       showError('Failed to connect wallet');
     } finally {
@@ -155,6 +165,21 @@ export default function SignUp() {
               )}
             </div>
 
+            <div className="input-wrap space-y-[5px] mt-[20px]">
+              <Label
+                htmlFor="referral_code"
+                className="font-roboto text-[14px] text-[#ffffff66] font-[300] leading-[normal] tracking-[normal]"
+              >
+                Referral Code (Optional)
+              </Label>
+              <Input
+                id="referral_code"
+                placeholder="Enter referral code"
+                className="font-roboto"
+                {...form.register('referral_code')}
+              />
+            </div>
+
             <div className="action-btn min-w-[100%] mt-[40px]">
               <button className="w-full" type="submit" disabled={loading}>
                 <Icons name="btnL" className="shrink-0" />
@@ -215,6 +240,13 @@ export default function SignUp() {
           </form>
         </div>
       </div>
+
+      <ReferralModal
+        isOpen={showReferralModal}
+        onClose={() => setShowReferralModal(false)}
+        onSubmit={handleReferralSubmit}
+        loading={walletLoading}
+      />
     </main>
   );
 }

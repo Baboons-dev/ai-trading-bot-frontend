@@ -1,36 +1,37 @@
 'use client';
+
+import { HeroSection } from '@/components/home/hero-section';
+import { LeaderboardSection } from '@/components/home/leaderboard-section';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { LandingHero } from '@/components/landing-hero';
-import { LandingNavbar } from '@/components/landing-navbar';
-import Image from 'next/image';
-import logo_img from '@/assets/images/logo.svg';
-import home_img from '@/assets/images/home_img.png';
 import Icons from '@/config/icon';
 import useUtilBreakpoint from '@/utils/useUtilBreakpoint';
+import Image from 'next/image';
+import Link from 'next/link';
+import logo_img from '@/assets/images/logo.svg';
+import home_img from '@/assets/images/home_img.png';
 
 export default function Home() {
   const { XS, SM, MD, LG, XL, XXL } = useUtilBreakpoint();
 
   return (
-    <main className="Homepage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
-      <div className="max-w-3xl mx-auto text-center">
-        <div className="flex items-center justify-center">
-          <Image src={logo_img} alt={'logo'} width={231} height={9999} />
-        </div>
+    <main className="Homepage min-h-screen">
+      {/* Logo Section */}
+      <div className="flex items-center justify-center pt-8">
+        <Image src={logo_img} alt={'logo'} width={231} height={9999} />
+      </div>
 
-        <p className="font-roboto text-[16px] text-[#ffffffbf] font-[300] leading-[normal] tracking-[normal] mt-[20px] mx-[auto] max-w-[540px]">
-          Create AI-powered Twitter bots with unique personalities and watch
-          them engage with your audience
-        </p>
+      {/* Hero Section */}
+      <HeroSection />
 
+      {/* Features Section - Commented out
+      <div className="container mx-auto px-4 py-20">
         <div
-          className="grid mt-[40px] mx-auto"
+          className="grid mx-auto"
           style={{
             gridTemplateColumns: `repeat(${MD ? 2 : 1}, minmax(0, 1fr))`,
             maxWidth: `${MD ? '100%' : '500px'}`,
+            gap: '2rem',
           }}
         >
           <div className="img-wrap">
@@ -49,20 +50,18 @@ export default function Home() {
             </div>
             <div className="row-item flex flex-col gap-[5px]">
               <h3 className="text-[14px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal] text-start">
-                Create Own Agents
+                Win Rewards
               </h3>
               <p className="text-[12px] font-roboto text-[#ffffff99] font-[300] leading-[normal] tracking-[normal] text-start">
-                Be the first to deploy AI Agents, gaining visibility and setting
-                the gold standard for innovation.
+                Refer friends and earn points to win amazing prizes including a Tesla Cybertruck.
               </p>
             </div>
             <div className="row-item flex flex-col gap-[5px]">
               <h3 className="text-[14px] text-[#ffffff] font-[600] leading-[normal] tracking-[normal] text-start">
-                Create Own Agents
+                Join Community
               </h3>
               <p className="text-[12px] font-roboto text-[#ffffff99] font-[300] leading-[normal] tracking-[normal] text-start">
-                Be the first to deploy AI Agents, gaining visibility and setting
-                the gold standard for innovation.
+                Be part of an exclusive community of innovators and early adopters.
               </p>
             </div>
           </div>
@@ -90,6 +89,10 @@ export default function Home() {
           </Link>
         </div>
       </div>
+      */}
+
+      {/* Leaderboard Section */}
+      <LeaderboardSection />
     </main>
   );
 }
