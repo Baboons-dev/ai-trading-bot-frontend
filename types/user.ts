@@ -8,7 +8,7 @@ export interface User extends BaseModel {
   telegram_id?: string;
   point?: number;
   refer_count?: number;
-  refer_bonus?: number;
+  referral_code?: number;
   refer_by?: number;
   is_active?: boolean;
   is_staff?: boolean;

@@ -1,4 +1,4 @@
-import { axios } from "..";
+import { axios } from '..';
 import {
   User,
   LoginCredentials,
@@ -6,43 +6,51 @@ import {
   AuthResponse,
   TwitterStats,
   LoginWithWalletCredentials,
-} from "@/types/user";
+} from '@/types/user';
 
 export const login = async (
-  credentials: LoginCredentials
+  credentials: LoginCredentials,
 ): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>(
-    "/api/user/login/",
-    credentials
+    '/api/user/login/',
+    credentials,
   );
   return response.data;
 };
 
 export const signup = async (
-  credentials: SignupCredentials
+  credentials: SignupCredentials,
 ): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>(
-    "/api/user/signup/",
-    credentials
+    '/api/user/signup/',
+    credentials,
   );
   return response.data;
 };
-
-export const GetUser = async (): Promise<User> => {
-  const response = await axios.get<User>("/api/user/current/");
+export const GetLeaderboard = async (): Promise<User> => {
+  const response = await axios.get<User>('/api/user/leaderboard/');
   return response.data;
 };
-
+export const GetUser = async (): Promise<User> => {
+  const response = await axios.get<User>('/api/user/current/');
+  return response.data?.data;
+};
+export const PostUser = async (ref_code: string): Promise<User> => {
+  const response = await axios.post<User>('/api/user/current/', {
+    ref_code: ref_code,
+  });
+  return response.data?.data;
+};
 export const GetTwitterStats = async (id: number): Promise<TwitterStats> => {
   const response = await axios.get<TwitterStats>(
-    `/api/user/twitter-stats/${id}`
+    `/api/user/twitter-stats/${id}`,
   );
   return response.data;
 };
 
 export const FetchTwitterStats = async (id: number): Promise<TwitterStats> => {
   const response = await axios.get<TwitterStats>(
-    `/api/user/twitter-stats/fetch/${id}`
+    `/api/user/twitter-stats/fetch/${id}`,
   );
   return response.data;
 };
@@ -53,17 +61,17 @@ export const TriggerGenerateTweet = async (id: number): Promise<void> => {
 };
 
 export const loginWithWallet = async (
-  credentials: LoginWithWalletCredentials
+  credentials: LoginWithWalletCredentials,
 ): Promise<AuthResponse> => {
   const response = await axios.post<AuthResponse>(
-    "/api/user/login-wallet/",
-    credentials
+    '/api/user/login-wallet/',
+    credentials,
   );
   return response.data;
 };
 
 export const getSignatureMessage = async (
-  publicKey: string
+  publicKey: string,
 ): Promise<{ message: string }> => {
   const response = await axios.get<any>(`/api/user/login-message/${publicKey}`);
   return response.data;

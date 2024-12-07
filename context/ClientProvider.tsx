@@ -43,11 +43,11 @@ const clickOptions = {
   contentMode: 'iframe',
   providers: [
     'casper-wallet',
-    "ledger",
-    "casperdash",
-    "metamask-snap",
-    "torus-wallet",
-    "casper-signer",
+    'ledger',
+    'casperdash',
+    'metamask-snap',
+    'torus-wallet',
+    'casper-signer',
   ],
   appId: 'e0ae2f89-016c-4a72-b9a1-f28fc300',
 };

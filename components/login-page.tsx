@@ -45,7 +45,7 @@ export default function Login() {
       localStorage.setItem('refresh_token', response.data.refresh_token);
       document.cookie = `token=${response.data.access_token}; path=/`;
       setToken(response.data.access_token);
-      router.push('/settings');
+      router.push('/refer');
     } catch (error: any) {
       showError(error.response?.data?.message || 'Invalid credentials');
     } finally {

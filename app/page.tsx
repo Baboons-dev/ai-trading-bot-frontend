@@ -10,10 +10,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import logo_img from '@/assets/images/logo.svg';
 import home_img from '@/assets/images/home_img.png';
+import { useEffect, useState } from 'react';
+import { GetLeaderboard } from '@/api/apiCalls/user';
 
 export default function Home() {
   const { XS, SM, MD, LG, XL, XXL } = useUtilBreakpoint();
-
+  const [users, setUsers] = useState<[]>();
+  useEffect(() => {
+    GetLeaderboard().then((res) => {
+      setUsers(res?.users);
+    });
+  }, []);
   return (
     <main className="Homepage min-h-screen">
       {/* Logo Section */}
@@ -92,7 +99,7 @@ export default function Home() {
       */}
 
       {/* Leaderboard Section */}
-      <LeaderboardSection />
+      <LeaderboardSection users={users} />
     </main>
   );
 }
