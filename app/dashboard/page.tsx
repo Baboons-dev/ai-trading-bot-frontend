@@ -212,7 +212,7 @@ export default function Dashboard() {
               </div>
 
               <div className="action-btn">
-                <button onClick={handleGenerateTweet}>
+                {/* <button onClick={handleGenerateTweet}>
                   <Icons name="btnL" />
                   <div className="inner px-[20px] min-w-[140px]">
                     <p className="font-tektur text-[14px] text-[#ffffff] font-[400] leading-[normal] tracking-[normal]">
@@ -220,7 +220,7 @@ export default function Dashboard() {
                     </p>
                   </div>
                   <Icons name="btnR" />
-                </button>
+                </button> */}
               </div>
             </div>
           )}
