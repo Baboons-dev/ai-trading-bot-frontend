@@ -34,7 +34,6 @@ const useWalletLogin = (redirectPath?: string) => {
             publicKey: evt.account.public_key,
             message: loginMessage.message,
             signedMessage: signed?.signatureHex || '',
-            referral_code: referralCode || undefined,
           });
 
           localStorage.removeItem('referral_code');
@@ -43,7 +42,7 @@ const useWalletLogin = (redirectPath?: string) => {
           document.cookie = `token=${response.data.access_token}; path=/`;
           setToken(response.data.access_token);
 
-          router.push(redirectPath || '/dashboard');
+          router.push(redirectPath || '/refer');
         }
       } catch (e) {
         localStorage.removeItem('token');

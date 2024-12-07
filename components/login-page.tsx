@@ -67,7 +67,7 @@ export default function Login() {
 
   const clickRef = useClickRef();
 
-  const { canUseCspr } = useWalletLogin('/dashboard');
+  const { canUseCspr } = useWalletLogin('/refer');
 
   return (
     <main className="LoginPage mx-auto min-h-screen flex justify-center items-center md:px-[40px] px-[20px] py-[60px]">
