@@ -14,7 +14,7 @@ export default function ProfilePage() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const clickRef = useClickRef();
-  const [rank, setRank] = useState<number>(0);
+  const [users, setUsers] = useState<[]>([]);
 
   useEffect(() => {
     if (!user) {
