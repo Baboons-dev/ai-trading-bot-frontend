@@ -75,7 +75,7 @@ export default function ReferPage() {
             <Link href="/profile">
               <Button variant="ghost">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Profile
+                Skip Referral
               </Button>
             </Link>
             <Button type="submit" disabled={form.formState.isSubmitting}>
